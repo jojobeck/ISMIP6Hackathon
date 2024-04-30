@@ -4,10 +4,7 @@ import pandas as pd
 import os
 import time
 import function_sampling_Thermal_forcing_files as fn
-#################################### 
-#  0. Path, expereiment names etc
-############################################
-#{{{ oath experiment etc 
+#{{{ path experiment etc 
 forcing_data_path = '/home/565/jb1863/ismip6_2300/'
 # Example experiment and corresponding ocean forcing names this can be drawn from the INFOS Dataframe
 
@@ -15,7 +12,7 @@ expnames = ['expAE02', 'expAE03', 'expAE04', 'expAE05']
 expnames_plot = ['CCSM4','HadGEM2','CESM2','UKESM']
 expnames_path = ['/1995-2300/CCSM4_RCP85','/1995-2299/HadGEM2-ES_RCP85','/1995-2299/CESM2-WACCM_SSP585','/1995-2300/UKESM1-0-LL_SSP585']
 
-i_e= 0 #choose experiment 2 -4 ,corresponds to the right climate modelforcign 
+i_e= 2 #choose experiment 2 -4 ,corresponds to the right climate modelforcign 
 experiment =expnames[i_e]
 name = expnames_path[i_e]
 
@@ -23,8 +20,6 @@ mnt_pth = '/home/565/jb1863/' #mount path,actual path if script is run on cluste
 pth_calc_output = mnt_pth + 'ismip6_hackathon/' #write folder
 dirPath =mnt_pth + 'ismip6_2300' #read folder
 # }}}
-###########################
-# 1. Get forcing data
 #############################
 #{{{ forcing data 
 tf = xr.open_dataset(
@@ -39,8 +34,6 @@ for i in range(len(tf['time'].values)):
 zbnd = tf.get('z_bnds').values[0,:]
 # }}}
 #############################
-#2. Create Table
-######################
 #{{{ table 
 # create table to bu used the loop of neccesary model output to be used stroe in results
 metadata = pd.read_csv('Metadata.txt')
@@ -96,12 +89,11 @@ pre_results = pd.DataFrame(results_data)
 results = pre_results[pre_results['Grid'] == 8]
 # }}}
 #######################
-# 3. Run the loop preprocessing
-###############################
 #{{{ runing script 
 start_time = time.time()
 for j in range(results.shape[0]):
-    i=j+1 #already made the first one
+    i=j #already made the first one
+    print('in loop,',i); 
     maskData = xr.open_dataset(results.iloc[i].path + '/' + results.iloc[i].mask_file)
 
     draftData = xr.open_dataset(results.iloc[i].path + '/' + results.iloc[i].base_file)
