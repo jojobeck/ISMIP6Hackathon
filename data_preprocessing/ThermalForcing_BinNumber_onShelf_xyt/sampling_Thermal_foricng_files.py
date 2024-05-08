@@ -4,34 +4,38 @@ import pandas as pd
 import os
 import time
 import function_sampling_Thermal_forcing_files as fn
+
 #{{{ path experiment etc 
 forcing_data_path = '/home/565/jb1863/ismip6_2300/'
 # Example experiment and corresponding ocean forcing names this can be drawn from the INFOS Dataframe
 
-expnames = ['expAE02', 'expAE03', 'expAE04', 'expAE05']
-expnames_plot = ['CCSM4','HadGEM2','CESM2','UKESM']
-expnames_path = ['/1995-2300/CCSM4_RCP85','/1995-2299/HadGEM2-ES_RCP85','/1995-2299/CESM2-WACCM_SSP585','/1995-2300/UKESM1-0-LL_SSP585']
+expnames = ['expAE02', 'expAE03', 'expAE04', 'expAE05', 'ctrlAE']
+expnames_plot = ['CCSM4','HadGEM2','CESM2','UKESM','ctrl']
+expnames_path = ['/1995-2300/CCSM4_RCP85','/1995-2299/HadGEM2-ES_RCP85','/1995-2299/CESM2-WACCM_SSP585','/1995-2300/UKESM1-0-LL_SSP585','climatology_from_obs_1995-2017/']
 
-i_e= 2 #choose experiment 2 -4 ,corresponds to the right climate modelforcign 
+i_e= 4 #choose experiment 2 -5 or ctrl ,corresponds to the right climate modelforcing 
 experiment =expnames[i_e]
 name = expnames_path[i_e]
 
 mnt_pth = '/home/565/jb1863/' #mount path,actual path if script is run on cluster
 pth_calc_output = mnt_pth + 'ismip6_hackathon/' #write folder
 dirPath =mnt_pth + 'ismip6_2300' #read folder
+res =8 #choose from 4,8,16 and 32
 # }}}
 #############################
 #{{{ forcing data 
-tf = xr.open_dataset(
-    forcing_data_path+name+"_thermal_forcing_8km_x_60m.nc")
+if experiment!='ctrlAE':
+    tf = xr.open_dataset(
+        forcing_data_path+name+"_thermal_forcing_"+str(int(res))+"km_x_60m.nc")
 
 
-# Get the time from the forcing
 
-time_forcing = np.empty(len(tf['time'].values))
-for i in range(len(tf['time'].values)):
-    time_forcing[i] = (int(tf['time'].values[i].strftime().split('-')[0]))
-zbnd = tf.get('z_bnds').values[0,:]
+    zbnd = tf.get('z_bnds').values[0,:]
+else:
+    tf = xr.open_dataset(
+        forcing_data_path+name +"obs_thermal_forcing_1995-2017_"+str(int(res))+"km_x_60m.nc")
+    zbnd = tf.get('z_bnds').values
+
 # }}}
 #############################
 #{{{ table 
@@ -86,9 +90,10 @@ for i in range(models.shape[0]):
 
 pre_results = pd.DataFrame(results_data)
 #HAack only use 8km file ,todo subsample for 4 and 16
-results = pre_results[pre_results['Grid'] == 8]
+results = pre_results[pre_results['Grid'] == res]
 # }}}
 #######################
+
 #{{{ runing script 
 start_time = time.time()
 for j in range(results.shape[0]):
@@ -104,7 +109,10 @@ for j in range(results.shape[0]):
     #get path save and names for the new nc data
     path_save, file_end=fn.get_outpath_tf_filend(results,i)
     #process data
-    d_calcnew,d_binnew = fn.process_data(maskData, draftData, zbnd, tf, time_model,d_calc,d_bin)
+    if experiment!='ctrlAE':
+        d_calcnew,d_binnew = fn.process_data(maskData, draftData, zbnd, tf, time_model,d_calc,d_bin)
+    else:
+        d_calcnew,d_binnew = fn.process_data_ctrlrun(maskData, draftData, zbnd, tf, time_model,d_calc,d_bin)
     print('save data to', path_save);
     d_calcnew.to_netcdf(path_save +'/shelf_thermalforcingBin'+file_end)
     d_binnew.to_netcdf(path_save +'/shelf_numberBin'+file_end)
