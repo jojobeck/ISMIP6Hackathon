@@ -1,6 +1,6 @@
-'sampling_Thermal_foricng_files.py' creates a table and runs of ice sheet models for a certain exp/climate forcing.
+'sampling_Thermal_foricng_files.py' creates a table and runs of ice sheet models for a certain exp/climate forcing and resolution.
 Change i_e it you want to change the exp/climate forcing.
-So far I have done all these only for 8km resolution only.
+sampling_Thermal_foricng_files_loop.py' does the same but does all exp and control runs for 1 ISM resolution 
 OUTPUT: - thermal forcing (no depth interpolation) on shelf (x,y,t)
 OUTPUT: - Bin number on shelf (x,y,t)
 all stored in
@@ -10,3 +10,4 @@ I use a virtual enviroments in python as well, so the installed packeges of that
 
 have not coded anything for parallel python  :(
  
+'sampling_Thermal_foricngintep_files.py uses forcing file but depth interpolated and weights.
