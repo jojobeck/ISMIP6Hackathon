@@ -99,6 +99,89 @@ def process_data(d, draft, zbnd, tf, time_model,d_calc,d_bin):
 
     return d_calc ,d_bin
     
+def process_data_ctrlrun(d, draft, zbnd, tf, time_model,d_calc,d_bin):
+# check time end of forcing file is either 2299 or 2300
+
+    for timei, time in enumerate(time_model):
+        print(time)
+        m_in = d.isel(time=timei).sftflf.values
+        m = m_in > 0.5  # takes cells that are mostly floating
+        shelf_draft = draft.isel(time=timei).base.values
+        shelf_draft[~m] = 100
+        shelf_draft_bin = np.empty(shelf_draft.shape)
+        shelf_draft_bin[:] = np.nan
+
+        # This will be the relevant thermal forcing
+        shelf_draft_bin_temp = np.empty(shelf_draft.shape)
+        shelf_draft_bin_temp[:] = np.nan
+
+        # create a mask of the depth indices of the shelf draft
+        for i, zbnd_i in enumerate(zbnd):
+            zmax = zbnd_i[0]
+            zmin = zbnd_i[-1]
+            ind_mask = np.nonzero(np.logical_and(shelf_draft < zmax, shelf_draft >= zmin))
+            shelf_draft_bin[ind_mask] = i
+        d_bin.isel(time=timei).bin_number.values[:] = shelf_draft_bin.copy()
+
+        yr = int(time_model[timei])
+        tf_time = tf.thermal_forcing.values # here only one time
+        for i, z in enumerate(tf.thermal_forcing.z.values):
+            maski = shelf_draft_bin == i
+            shelf_draft_bin_temp[maski] = tf_time[i, maski]
+        d_calc.isel(time=timei).thermalforcing_bin.values[:] = shelf_draft_bin_temp.copy()
+
+    return d_calc ,d_bin
+
+def process_data_withInterp_ctrlrun(d, draft, zbnd, tf, time_model,d_calc):
+# check time end of forcing file is either 2299 or 2300
+    nz,ny,nx = tf.thermal_forcing.shape
+    #no time for tf here!
+    for timei, time in enumerate(time_model):
+        print(time)
+        m_in = d.isel(time=timei).sftflf.values
+        m = m_in > 0.5  # takes cells that are mostly floating
+        shelf_draft = draft.isel(time=timei).base.values
+        shelf_draft[~m] = 100
+        shelf_draft_bin = np.empty(shelf_draft.shape)
+        shelf_draft_bin[:] = np.nan
+        shelf_draft_upper = np.empty(shelf_draft.shape)
+        shelf_draft_upper[:] = np.nan
+        shelf_draft_lower = np.empty(shelf_draft.shape)
+        shelf_draft_lower[:] = np.nan
+
+        # This will be the relevant thermal forcing
+        shelf_draft_bin_temp = np.empty(shelf_draft.shape)
+        shelf_draft_tf_upper = np.empty(shelf_draft.shape)
+        shelf_draft_tf_lower = np.empty(shelf_draft.shape)
+        
+        # find correct time of thermal forcing
+        yr = int(time_model[timei])
+        tf_time = tf.thermal_forcing.values
+        tf_bnds = np.empty([nz+1,ny,nx])
+        tf_bnds[1:-1,:,:] = tf_time[0:-1,:,:] + 0.5*(tf_time[1:,:,:]-tf_time[0:-1,:,:])
+        tf_bnds[0,:,:] = tf_time[0,:,:]
+        tf_bnds[-1,:,:] = tf_time[-1,:,:]
+
+        # create a mask of the depth indices of the shelf draft
+        for i, zbnd_i in enumerate(zbnd):
+            zmax = zbnd_i[0]
+            zmin = zbnd_i[-1]
+            ind_mask = np.nonzero(np.logical_and(shelf_draft < zmax, shelf_draft >= zmin))
+            shelf_draft_bin[ind_mask] = i
+            shelf_draft_upper[ind_mask] = zmax
+            shelf_draft_lower[ind_mask] = zmin
+
+        # find the thermal forcing at the correct depth
+        for i, z in enumerate(tf.thermal_forcing.z.values):
+            maski = shelf_draft_bin == i
+            shelf_draft_bin_temp[maski] = tf_time[i, maski]
+            shelf_draft_tf_upper[maski] = tf_bnds[i,maski]
+            shelf_draft_tf_lower[maski] = tf_bnds[i+1,maski]
+        # now interpolate to find the weighted thermal forcing
+        thermalforcing_interp_in = weightedInterpTemp(shelf_draft_upper,shelf_draft_lower,shelf_draft,shelf_draft_tf_upper,shelf_draft_tf_lower)
+        d_calc.isel(time=timei).thermalforcing_interp.values[:] = thermalforcing_interp_in.copy()
+
+    return d_calc 
 def process_data_withInterp(d, draft, zbnd, tf, time_model,d_calc):
 # check time end of forcing file is either 2299 or 2300
     if np.size(tf.time.values) > 305:
