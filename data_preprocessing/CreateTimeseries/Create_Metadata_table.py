@@ -2,27 +2,12 @@
 # coding: utf-8
 
 # # Create pandas dataframe containing relevant ISMIP6 2300 infos
-# 
-# This notebook creates a pandas Dataframe containing the relevant metadata for the ISMIP6 AIS 2300 simulations
-
-# In[1]:
 
 
 import pandas as pd
 import netCDF4 as nc
 import numpy as np
 import matplotlib.pyplot as plt
-
-
-# In[2]:
-
-
-pd.set_option('display.max_columns', None)  
-pd.set_option('display.max_rows', None)  
-pd.set_option('display.max_colwidth', None)  
-
-
-# In[3]:
 
 
 # We here collect all information
@@ -271,8 +256,6 @@ grounding_line_melting_per_submission = [
 ]
 
 
-# In[4]:
-
 
 # We put all information into one Dataframe
 
@@ -305,19 +288,6 @@ for i,group in enumerate(groups):
         tot_count = tot_count+1
 
 
-# In[5]:
-
-
-MD
-
-
-# In[6]:
-
-
-4*43 # This is how long it should be
-
-
-# In[7]:
 
 
 # Save the dataframe
@@ -327,57 +297,10 @@ MD.to_csv('Metadata.txt')
 
 # # Examples on how to use the dataframe
 
-# In[8]:
-
-
-MD = pd.read_csv('Metadata.txt', index_col=0)
-
-
-# In[9]:
-
-
-display(MD)
-
-
-# In[12]:
-
-
-MD.loc[MD['Experiment']==exp,'fileID']
-
-
-# In[13]:
-
-
-MD['fileID']
-
-
-# In[14]:
-
-
-# test loading data using the names 
-
-yearlen = 360*24*60*60
-
-exp='expAE02'
-var = 'shelfmelt'
-
-MD_exp = MD.loc[MD['Experiment']==exp,:]
-
-path_to_files = '/home/ronja/projects/MeltSensitivity/10528582/ComputedScalars/ComputedScalars/'+exp+'/'+var+'/'
-
-plt.figure(figsize=[20,10])
-
-for i in MD_exp.index:
-    filename = path_to_files+'computed_'+var+'_AIS_'+MD['fileID'][i]+'_'+exp+'.nc'
-    #print(filename)
-    ncf = nc.Dataset(filename)
-    melt = np.squeeze(ncf['shelfmelt']) *yearlen/1e12*-1 # kg/s -> Gt/a, make it positive
-    
-    plt.plot(melt)
-
-
-# In[ ]:
-
+#MD = pd.read_csv('Metadata.txt', index_col=0)
+#display(MD)
+#MD.loc[MD['Experiment']==exp,'fileID']
+#MD['fileID']
 
 
 
