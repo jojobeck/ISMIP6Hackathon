@@ -27,8 +27,7 @@ loop_info=loop_info[loop_info.Grid ==res].reset_index(drop=True)
 
 
 start_time = time.time()
-# for i_e,expo in enumerate(expnames):
-for i_e in range(4,5): 
+for i_e,expo in enumerate(expnames):
     experiment =expnames[i_e]
     name = expnames_path[i_e]
     results_exp =loop_info[loop_info['Experiment'] == experiment].reset_index(drop =True)
