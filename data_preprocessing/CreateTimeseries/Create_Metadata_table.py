@@ -65,7 +65,7 @@ names_of_files = ['DC_ISSM',
                         'PIK_PISM',
                         'UCM_Yelmo',
                         'UCSD_ISSM',
-                        'ULB_fETISh-KoriBU1', 'ULB_fETISh-KoriBU1',
+                        'ULB_fETISh-KoriBU1', 'ULB_fETISh-KoriBU2',
                         'UNN_Ua',
                         'UTAS_ElmerIce',
                         'VUB_AISMPALEO',
@@ -259,10 +259,10 @@ grounding_line_melting_per_submission = [
 
 # We put all information into one Dataframe
 
-MD = pd.DataFrame({})
+# MD = pd.DataFrame({})
 
 tot_count = 0
-
+MD_in =[]
 for i,group in enumerate(groups):
     print(group)
     model = models[i]
@@ -284,9 +284,9 @@ for i,group in enumerate(groups):
                         'GL treatment': grounding_line_treatment[grounding_line_treatment_per_submission[tot_count]],
                         'GL melt': grounding_line_melting[grounding_line_melting_per_submission[tot_count]],                       
                        }
-            MD = MD.append(temp_dict, ignore_index=True)
+            MD_in.append(temp_dict)
         tot_count = tot_count+1
-
+MD = pd.DataFrame(MD_in)
 
 
 
