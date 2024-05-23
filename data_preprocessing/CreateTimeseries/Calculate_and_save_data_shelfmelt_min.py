@@ -3,8 +3,6 @@
 
 # # Calculate shelf area per region 
 
-# In[7]:
-
 
 import numpy as np
 import xarray as xr
@@ -12,75 +10,27 @@ import os
 from matplotlib import pylab as plt
 import pandas as pd
 
+import function_sampling_Thermal_forcing_files as fn
 
-# In[8]:
 
-
-mnt_pth = '/mnt/ronja/nci/' #mount path
+mnt_pth = '/home/565/jb1863/' #mnt/ronja/nci/' #mount path
 pth_calc_output = mnt_pth + 'ismip6_hackathon/ComputedScalars/' #write folder
 
 pth_ismip6 =mnt_pth + 'ismip6_2300/' #read folder
 pth_helene =mnt_pth + 'ismip6_hackathon/ComputedScalarsHelene/'
 
-expnames = ['expAE02', 'expAE03', 'expAE04', 'expAE05']
+expnames = ['expAE02', 'expAE03', 'expAE04', 'expAE05', 'ctrlAE']
 
-
-# In[9]:
 
 
 dirPath = pth_ismip6
 
-metadata = pd.read_csv('Metadata.txt')
+metadata_file ='Metadata.txt'
 
 removeFileID = ['IMAU_UFEMISM1', 'IMAU_UFEMISM2', 'IMAU_UFEMISM3', 'IMAU_UFEMISM4',
                'DOE_MALI_4km', 'DOE_MALI_8km_Ant95', 'DOE_MALI_8km_AntMean'] # specify models to remove
 
-models = metadata.loc[( metadata['Experiment'].isin(expnames)) &
-        ~(metadata['fileID'].isin(removeFileID)),]
-
-# initialize empty dataframe to store processed_data, containing file, pathtofile, experiment, model, grid
-loop_info = pd.DataFrame(columns=['basefile', 'libmassbfflfile', 'maskfile' ,
-                                 'path', 'Experiment', 'Model', 'Grid'])
-
-for i in range(models.shape[0]):
-
-    modelPath = models.iloc[i].fileID
-    exp = models.iloc[i].Experiment
-    modelFiles = os.listdir(dirPath + '/' + modelPath)
-    expDirPos = [i for i, dirName in enumerate(modelFiles) if dirName.startswith(exp)]
-
-
-    # For each relevant directory, loop
-    for expdir_subgrid in expDirPos:
-        expDir = modelFiles[expdir_subgrid]
-        expFiles = os.listdir(dirPath + '/' + modelPath + '/' + expDir)
-
-        # Get grid size from expDir: format expAE01_04 where 04 is the grid size and convert to int
-        grid = int(expDir.split('_')[1])
-    
-        # Find position of relevant files
-        draftPos = [i for i, fileName in enumerate(expFiles) if fileName.startswith('base')]
-        meltPos = [i for i, fileName in enumerate(expFiles) if fileName.startswith('libmassbffl')]
-        maskPos = [i for i, fileName in enumerate(expFiles) if fileName.startswith('sftflf')]
-    
-        #save into processed_data
-        loop_info = loop_info.append({'basefile': expFiles[draftPos[0]],
-                                    #'libmassbfflfile': expFiles[meltPos[0]],
-                                    'maskfile': expFiles[maskPos[0]],
-                                    'path': dirPath + '/' + modelPath + '/' + expDir,
-                                    'Experiment': exp,
-                                    'Model': modelPath,
-                                    'Grid': grid},
-                                    ignore_index=True)
-
-
-# In[10]:
-
-
-loop_info
-
-
-# In[ ]:
+loop_info = fn.create_loop_info(mnt_pth, expnames, removeFileID, metadata_file)
 
 
 # Using some standard values here, is this a good idea???
@@ -88,8 +38,6 @@ loop_info
 yearlen = 360*24*60*60 
 rhoi=910
 
-
-# In[28]:
 
 
 # Iterate over loop info
@@ -103,8 +51,8 @@ for fi in range(len(loop_info.index)):
     grid = loop_info['Grid'][fi]
     exp = loop_info['Experiment'][fi]
     model = loop_info['Model'][fi]
-    maskfile = loop_info['maskfile'][fi]
-    #basefile = loop_info['basefile'][fi]
+    maskfile = loop_info['mask_file'][fi]
+    basefile = loop_info['base_file'][fi]
     
     print(model)
     
@@ -112,7 +60,7 @@ for fi in range(len(loop_info.index)):
     d_region = xr.open_dataset(pth_ismip6+'masks/sectors_'+str(grid)+'km.nc') #
     mask = xr.open_dataset(pth+'/'+maskfile)
     #base = xr.open_dataset(pth+'/'+basefile)
-    melt = xr.open_dataset(pth+'/'+basefile.replace('sftflf','libmassbffl'))
+    melt = xr.open_dataset(pth+'/'+basefile.replace('base','libmassbffl'))
 
     # create the new file     
     filename =  pth_helene+'/'+exp+'/shelfmelt/computed_shelfmelt_AIS_'+model+'_'+exp+'.nc'
@@ -144,7 +92,15 @@ for fi in range(len(loop_info.index)):
             d_calc[var_name].values = np.zeros(len(d_example.time.values)) # assign you calc output not 0 :)
 
             time = range(len(mask.time)) # FIXME is this a good idea?
-            finalvar = np.zeros([len(time)])
+            if len(mask.time)<len(d_example.time.values):
+                print('Warning ice mask has shorter time then shelfmelt')
+                print(len(time))
+                print(len(d_example.time.values))
+            if len(mask.time)>len(d_example.time.values):
+                print('longer time than values')
+                time = range(len(d_example.time.values))
+
+            finalvar= np.zeros(len(d_example.time.values)) # assign you calc output not 0 :)
 
             if 'sector' in var_name:
                 si = int(var_name.split('_')[-1]) # get sector number
@@ -159,8 +115,12 @@ for fi in range(len(loop_info.index)):
                 mask_slice = mask.isel(time=ti).sftflf.values[:] > 0.5
                 #mask_slice[mask_slice<0.5] = 0 # MAKE sure to only include cells that are more floating than grounded
                 msk = np.logical_and(smask,mask_slice) 
-                melt_slice = melt.isel(time=ti).libmassbffl.values[:]
-                finalvar[ti] = np.nanmin(melt_slice[msk]) / rhoi*yearlen 
+                if np.sum(msk) == 0:
+                    finalvar[ti] = np.nan
+                else:
+
+                    melt_slice = melt.isel(time=ti).libmassbffl.values[:]
+                    finalvar[ti] = np.nanmin(melt_slice[msk]) / rhoi*yearlen 
                 
             d_calc[var_name].values = finalvar[:len(d_calc[var_name])]
             
@@ -178,10 +138,5 @@ for fi in range(len(loop_info.index)):
     #break
     
     
-
-
-# In[ ]:
-
-
 print('Done :-D')
 

@@ -9,7 +9,6 @@
 import numpy as np
 import xarray as xr
 import os
-from matplotlib import pylab as plt
 import pandas as pd
 import function_sampling_Thermal_forcing_files as fn
 
@@ -29,7 +28,7 @@ loop_info = fn.create_loop_info(mnt_pth, expnames, removeFileID, metadata_file)
 # do 8km for now
 
 
-variable_name = 'thermalforcing' #please don't change
+variable_name = 'thermalforcingBin' #please don't change
 
 
 for fi in range(len(loop_info.index)):
@@ -51,7 +50,7 @@ for fi in range(len(loop_info.index)):
     mask = xr.open_dataset(pth+'/'+maskfile)
     
     path_save, file_end=fn.get_outpath_tf_filend(loop_info,fi)
-    tf = xr.open_dataset(path_save +'/shelf_thermalforcingInterp'+file_end)
+    tf = xr.open_dataset(path_save +'/shelf_thermalforcingBin'+file_end)
     
  
     #ensure same time length and truncate dataset if neccessary
@@ -68,7 +67,7 @@ for fi in range(len(loop_info.index)):
             smask = sector_masks[int(var_name.split('_')[-1])] if 'sector' in var_name else region_masks[int(var_name.split('_')[-1])] if 'region' in var_name else d_region.sectors.values > 0
 
             m_flotregion = mask_floating & smask  # mask region and shelf extent over time
-            masked_values = np.where(m_flotregion, tf_trun.thermalforcing_interp.values, np.nan)
+            masked_values = np.where(m_flotregion, tf_trun.thermalforcing_bin.values, np.nan)
                                                                                                                                                                                                                                               
             # Compute the mean along the time axis, ignoring NaNs
             mean_values = np.nanmean(masked_values, axis=(1, 2))

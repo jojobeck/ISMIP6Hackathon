@@ -1,88 +1,34 @@
+
 #!/usr/bin/env python
 # coding: utf-8
 
 # # Calculate shelf area per region 
 
-# In[7]:
-
-
 import numpy as np
 import xarray as xr
 import os
-from matplotlib import pylab as plt
 import pandas as pd
 
+import function_sampling_Thermal_forcing_files as fn
 
-# In[8]:
 
-
-mnt_pth = '/mnt/ronja/nci/' #mount path
+mnt_pth = '/home/565/jb1863/' #mnt/ronja/nci/' #mount path
 pth_calc_output = mnt_pth + 'ismip6_hackathon/ComputedScalars/' #write folder
 
 pth_ismip6 =mnt_pth + 'ismip6_2300/' #read folder
 pth_helene =mnt_pth + 'ismip6_hackathon/ComputedScalarsHelene/'
 
-expnames = ['expAE02', 'expAE03', 'expAE04', 'expAE05']
-
-
-# In[9]:
+expnames = ['expAE02', 'expAE03', 'expAE04', 'expAE05', 'ctrlAE']
 
 
 dirPath = pth_ismip6
 
-metadata = pd.read_csv('Metadata.txt')
+metadata_file ='Metadata.txt'
 
 removeFileID = ['IMAU_UFEMISM1', 'IMAU_UFEMISM2', 'IMAU_UFEMISM3', 'IMAU_UFEMISM4',
                'DOE_MALI_4km', 'DOE_MALI_8km_Ant95', 'DOE_MALI_8km_AntMean'] # specify models to remove
 
-models = metadata.loc[( metadata['Experiment'].isin(expnames)) &
-        ~(metadata['fileID'].isin(removeFileID)),]
-
-# initialize empty dataframe to store processed_data, containing file, pathtofile, experiment, model, grid
-loop_info = pd.DataFrame(columns=['basefile', 'libmassbfflfile', 'maskfile' ,
-                                 'path', 'Experiment', 'Model', 'Grid'])
-
-for i in range(models.shape[0]):
-
-    modelPath = models.iloc[i].fileID
-    exp = models.iloc[i].Experiment
-    modelFiles = os.listdir(dirPath + '/' + modelPath)
-    expDirPos = [i for i, dirName in enumerate(modelFiles) if dirName.startswith(exp)]
-
-
-    # For each relevant directory, loop
-    for expdir_subgrid in expDirPos:
-        expDir = modelFiles[expdir_subgrid]
-        expFiles = os.listdir(dirPath + '/' + modelPath + '/' + expDir)
-
-        # Get grid size from expDir: format expAE01_04 where 04 is the grid size and convert to int
-        grid = int(expDir.split('_')[1])
-    
-        # Find position of relevant files
-        draftPos = [i for i, fileName in enumerate(expFiles) if fileName.startswith('base')]
-        meltPos = [i for i, fileName in enumerate(expFiles) if fileName.startswith('libmassbffl')]
-        maskPos = [i for i, fileName in enumerate(expFiles) if fileName.startswith('sftflf')]
-    
-        #save into processed_data
-        loop_info = loop_info.append({'basefile': expFiles[draftPos[0]],
-                                    #'libmassbfflfile': expFiles[meltPos[0]],
-                                    'maskfile': expFiles[maskPos[0]],
-                                    'path': dirPath + '/' + modelPath + '/' + expDir,
-                                    'Experiment': exp,
-                                    'Model': modelPath,
-                                    'Grid': grid},
-                                    ignore_index=True)
-
-
-# In[10]:
-
-
-loop_info
-
-
-# In[28]:
-
-
+loop_info = fn.create_loop_info(mnt_pth, expnames, removeFileID, metadata_file)
 # Iterate over loop info
 
 variable_name = 'averageDraftDepth' #please don't change
@@ -94,8 +40,8 @@ for fi in range(len(loop_info.index)):
     grid = loop_info['Grid'][fi]
     exp = loop_info['Experiment'][fi]
     model = loop_info['Model'][fi]
-    maskfile = loop_info['maskfile'][fi]
-    basefile = loop_info['basefile'][fi]
+    maskfile = loop_info['mask_file'][fi]
+    basefile = loop_info['base_file'][fi]
     
     print(model)
     
@@ -133,8 +79,8 @@ for fi in range(len(loop_info.index)):
             print(var_name)
             d_calc[var_name].values = np.zeros(len(d_example.time.values)) # assign you calc output not 0 :)
 
-            time = range(len(mask.time)) # FIXME is this a good idea?
-            shelfdraft = np.zeros([len(time)])
+            time_i= range(len(mask.time)) # FIXME is this a good idea?
+            shelfdraft = np.zeros([len(time_i)])
 
             if 'sector' in var_name:
                 si = int(var_name.split('_')[-1]) # get sector number
@@ -143,16 +89,22 @@ for fi in range(len(loop_info.index)):
                 si = int(var_name.split('_')[-1]) # get sector number
                 smask = d_region.regions.values==si
             else:
+                #entire AIS
                 smask = d_region.sectors.values>0
 
-            for ti in time:
+            for ti in time_i:
                 mask_slice = mask.isel(time=ti).sftflf.values[:] > 0.5
                 #mask_slice[mask_slice<0.5] = 0 # MAKE sure to only include cells that are more floating than grounded
                 msk = np.logical_and(smask,mask_slice) 
                 base_slice = base.isel(time=ti).base.values[:]
-                shelfdraft[ti] = np.nanmean(base_slice[msk]) 
+                # Check if the slice is empty
+                if np.sum(msk) == 0:
+                    shelfdraft[ti] = np.nan
+                else:
+                    shelfdraft[ti] = np.nanmean(base_slice[msk])
+
                 
-            d_calc[var_name].values = shelfdraft[:len(d_calc[var_name])]
+            d_calc[var_name].values = shelfdraft[:len(d_calc[var_name].values)]
             
     # save data 
     path_save = f"{pth_calc_output}{exp}/{variable_name}/"
@@ -170,19 +122,10 @@ for fi in range(len(loop_info.index)):
     
 
 
-# In[ ]:
-
-
 print('Done :-D')
 
+#d_calc.averageDraftDepth_region_1.plot()
 
-# In[27]:
-
-
-d_calc.averageDraftDepth_region_1.plot()
-
-
-# In[ ]:
 
 
 
