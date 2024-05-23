@@ -72,14 +72,14 @@ for i in range(models.shape[0]):
 
 pre_results = pd.DataFrame(results_data)
 #HAack only use 8km file ,todo subsample for 4 and 16
-results = pre_results[pre_results['Grid'] == res]
+loop_info = pre_results[pre_results['Grid'] == res].reset_index(drop=True)
 # }}}
 for i_e,experiment in enumerate(expnames):
     experiment =expnames[i_e]
     name = expnames_path[i_e]
     print(name)
     #create table only for one experiment type alias forcing file
-    results_exp = results[results['Experiment'] == experiment]
+    results =loop_info[loop_info['Experiment'] == experiment].reset_index(drop=True)
     if experiment!='ctrlAE':
         tf = xr.open_dataset(
             forcing_data_path+name+"_thermal_forcing_"+str(int(res))+"km_x_60m.nc")
@@ -93,8 +93,7 @@ for i_e,experiment in enumerate(expnames):
         zbnd = tf.get('z_bnds').values
 
 
-    for i in range(results_exp.shape[0]):
-        i #already made the first one
+    for i in range(results.shape[0]):
         print('in loop,',i); 
         print(results.iloc[i].mask_file)
         maskData = xr.open_dataset(results.iloc[i].path + '/' + results.iloc[i].mask_file)
