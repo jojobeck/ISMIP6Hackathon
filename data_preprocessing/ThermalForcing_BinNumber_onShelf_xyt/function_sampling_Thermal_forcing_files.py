@@ -16,12 +16,16 @@ def create_empty_dummies_nc(d):
     variable_name = 'thermalforcing_bin'
     varname_old = 'sftflf'
     d_calc =d_calc.rename({varname_old:variable_name })
+    if not np.issubdtype(d_calc[variable_name].values.dtype, np.floating):
+        d_calc[variable_name] =d_calc[variable_name].astype(float)
 
-    d_calc.thermalforcing_bin.values = np.zeros((d_calc.thermalforcing_bin.shape))
+    d_calc.thermalforcing_bin.values = np.full(d['sftflf'].shape, np.nan)
     d_bin =d.copy()
     d_bin.attrs={}
-    d_bin =d_bin.rename({varname_old:'bin_number' })
-    d_bin.bin_number.values = np.zeros((d_calc.thermalforcing_bin.shape))
+    d_bin =d_bin.rename({'sftflf':'bin_number' })
+    if not np.issubdtype(d_bin.bin_number.values.dtype, np.floating):
+        d_bin['bin_number'] =d_bin.bin_number.astype(float)
+    d_bin.bin_number.values = np.full(d['sftflf'].shape, np.nan)
 
 
 
@@ -29,8 +33,16 @@ def create_empty_dummies_nc(d):
 def process_model_tf(results_exp,i,experiment,tf,zbnd):
 
     maskData = xr.open_dataset(results_exp.iloc[i].path + '/' + results_exp.iloc[i].mask_file)
+    maskfile = results_exp.iloc[i].mask_file
+    maskfile_ice= maskfile.replace('sftflf','sftgif')
+    mask_ice = xr.open_dataset(results_exp.iloc[i].path +'/'+maskfile_ice)
+    no_ice=mask_ice.sftgif.values ==0
+
+    # maskData.sftflf.values[no_ice]=np.nan
+
 
     draftData = xr.open_dataset(results_exp.iloc[i].path + '/' + results_exp.iloc[i].base_file)
+    draftData.base.values[no_ice]=np.nan
 
     d_calc,d_bin = create_empty_dummies_nc(maskData)
 
@@ -166,8 +178,10 @@ def create_empty_dummy_interp_nc(d):
     variable_name = 'thermalforcing_interp'
     varname_old = 'sftflf'
     d_calc =d_calc.rename({varname_old:variable_name })
+    if not np.issubdtype(d_calc.thermalforcing_interp.values.dtype, np.floating):
+        d_calc['thermalforcing_interp'] =d_calc.thermalforcing_interp.astype(float)
 
-    d_calc.thermalforcing_interp.values = np.zeros((d_calc.thermalforcing_interp.shape))
+    d_calc.thermalforcing_interp.values =  np.full(d['sftflf'].shape, np.nan)   
 
 
 
