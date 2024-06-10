@@ -94,7 +94,7 @@ for i in range(18):
     sectors.append('sector_'+str(i+1))
 
 
-for fi in range(len(loop_info.index[:1])): # FIXME remove [:1]
+for fi in range(len(loop_info.index)): # 
     print (fi)
     
     pth = loop_info['path'][fi]
