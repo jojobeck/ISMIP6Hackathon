@@ -125,7 +125,9 @@ for fi in range(len(loop_info.index)):
             data_iareagr_ctrl = d_iareagr_ctrl[var_name_iareagr].values # m2
                 
             dt = 1 # FIXME we assume a yearly time step
-            d_new[var_name].values =  np.squeeze(data_iareagr - data_iareagr_ctrl) 
+            min_len = min(len(data_iareagr), len(data_iareagr_ctrl))
+            d_new[var_name].values =  np.squeeze(data_iareagr[:min_len] - data_iareagr_ctrl[:min_len])
+            #d_new[var_name].values =  np.squeeze(data_iareagr - data_iareagr_ctrl) 
         
         
     # save dataset 

@@ -105,10 +105,14 @@ for fi in range(len(loop_info.index)): #
     #basefile = loop_info['base_file'][fi]
     
     print(pth)
-    filename = os.path.join(path,computed_name,expname,'iareagr','computed_iareagr_AIS_'+model+'_'+expname+'.nc')
-    d_iareagr = xr.open_dataset(filename,decode_times=False )
-    d_iareagr_ctrl = xr.open_dataset(filename.replace(expname, 'ctrlAE'),decode_times=False)
+    filename = os.path.join(path,computed_name,expname,'ivaf','computed_ivaf_AIS_'+model+'_'+expname+'.nc')
+    d_ivaf = xr.open_dataset(filename,decode_times=False )
+    d_ivaf_ctrl = xr.open_dataset(filename.replace(expname, 'ctrlAE'),decode_times=False)
     
+    
+    filename2 = os.path.join(path,computed_name,expname,'smbgr','computed_smbgr_AIS_'+model+'_'+expname+'.nc')
+    d_smbgr = xr.open_dataset(filename2,decode_times=False ) 
+    d_smbgr_ctrl = xr.open_dataset(filename2.replace(expname, 'ctrlAE'),decode_times=False ) 
     
     # create a new xarray
     d_new =d_ivaf.copy()
@@ -152,8 +156,6 @@ for fi in range(len(loop_info.index)): #
             
         
     d_new.to_netcdf(path_save+'/'+save_name)    
-
-
 
 
 
