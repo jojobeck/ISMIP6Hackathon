@@ -503,9 +503,11 @@ def create_loop_info(mnt_pth, expnames, removeFileID, metadata_file):
 
     # Convert to DataFrame
     loop_info = pd.DataFrame(loop_info_in)
-    ind= loop_info.index[loop_info.path =='/home/565/jb1863/ismip6_2300/NORCE_CISM5-MAR364-ERA-t1-local/expAE05_16_old'].tolist()
-    loop_info = loop_info[loop_info.index != ind[0]].reset_index(drop=True)
+    # Note: I think the next two lines are covered by the above check that we are in a given list of experiments
+    #ind= loop_info.index[loop_info.path ==mnt_pth+'/ismip6_2300/NORCE_CISM5-MAR364-ERA-t1-local/expAE05_16_old'].tolist()
+    #loop_info = loop_info[loop_info.index != ind[0]].reset_index(drop=True)
     return loop_info
-def correct_runs_missing_exp(df):
-    df = df[(df.path == '/home/565/jb1863/ismip6_2300/NORCE_CISM5-MAR364-ERA-t1-local/expAE05_16') | (df.Model =='ULB_fETISh-KoriBU2')].reset_index(drop=True)
+
+def correct_runs_missing_exp(df,mnt_pth):
+    df = df[(df.path == mnt_pth+'/ismip6_2300/NORCE_CISM5-MAR364-ERA-t1-local/expAE05_16') | (df.Model =='ULB_fETISh-KoriBU2')].reset_index(drop=True)
     return df
