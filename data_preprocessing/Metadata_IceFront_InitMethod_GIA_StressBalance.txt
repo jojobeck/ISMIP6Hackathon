@@ -1,0 +1,216 @@
+,Group,Model,Experiment,Climate Forcing,Model setup,fileID,Main submission,Melt parameterisation,Melt parameters,Resolution,Resolution GL,GL treatment,GL melt,ice front,init method,stress balance,GIA
+0,DC,ISSM,ctrlAE,ctrl,DC\_ISSM,DC_ISSM,True,Quad. Non-local,AntMean median,4km,4km,Sub-Grid,Sub-Grid,MH,DA,SSA,No
+1,DC,ISSM,expAE02,CCSM4,DC\_ISSM,DC_ISSM,True,Quad. Non-local,AntMean median,4km,4km,Sub-Grid,Sub-Grid,MH,DA,SSA,No
+2,DC,ISSM,expAE03,HadGEM2,DC\_ISSM,DC_ISSM,True,Quad. Non-local,AntMean median,4km,4km,Sub-Grid,Sub-Grid,MH,DA,SSA,No
+3,DC,ISSM,expAE04,CESM2,DC\_ISSM,DC_ISSM,True,Quad. Non-local,AntMean median,4km,4km,Sub-Grid,Sub-Grid,MH,DA,SSA,No
+4,DC,ISSM,expAE05,UKESM,DC\_ISSM,DC_ISSM,True,Quad. Non-local,AntMean median,4km,4km,Sub-Grid,Sub-Grid,MH,DA,SSA,No
+5,DOE,MALI,ctrlAE,ctrl,DOE\_MALI\_4km,DOE_MALI_4km,True,Quad. Non-local,AntMean median,4km,2km,Floating condition,No melt,RO,DA+,HO,No
+6,DOE,MALI,expAE02,CCSM4,DOE\_MALI\_4km,DOE_MALI_4km,True,Quad. Non-local,AntMean median,4km,2km,Floating condition,No melt,RO,DA+,HO,No
+7,DOE,MALI,expAE03,HadGEM2,DOE\_MALI\_4km,DOE_MALI_4km,True,Quad. Non-local,AntMean median,4km,2km,Floating condition,No melt,RO,DA+,HO,No
+8,DOE,MALI,expAE04,CESM2,DOE\_MALI\_4km,DOE_MALI_4km,True,Quad. Non-local,AntMean median,4km,2km,Floating condition,No melt,RO,DA+,HO,No
+9,DOE,MALI,expAE05,UKESM,DOE\_MALI\_4km,DOE_MALI_4km,True,Quad. Non-local,AntMean median,4km,2km,Floating condition,No melt,RO,DA+,HO,No
+10,DOE,MALI,ctrlAE,ctrl,DOE\_MALI\_8km\_Ant95,DOE_MALI_8km_Ant95,False,Quad. Non-local,AntMean 95th,8km,2km,Floating condition,No melt,RO,DA+,HO,No
+11,DOE,MALI,expAE02,CCSM4,DOE\_MALI\_8km\_Ant95,DOE_MALI_8km_Ant95,False,Quad. Non-local,AntMean 95th,8km,2km,Floating condition,No melt,RO,DA+,HO,No
+12,DOE,MALI,expAE03,HadGEM2,DOE\_MALI\_8km\_Ant95,DOE_MALI_8km_Ant95,False,Quad. Non-local,AntMean 95th,8km,2km,Floating condition,No melt,RO,DA+,HO,No
+13,DOE,MALI,expAE04,CESM2,DOE\_MALI\_8km\_Ant95,DOE_MALI_8km_Ant95,False,Quad. Non-local,AntMean 95th,8km,2km,Floating condition,No melt,RO,DA+,HO,No
+14,DOE,MALI,expAE05,UKESM,DOE\_MALI\_8km\_Ant95,DOE_MALI_8km_Ant95,False,Quad. Non-local,AntMean 95th,8km,2km,Floating condition,No melt,RO,DA+,HO,No
+15,DOE,MALI,ctrlAE,ctrl,DOE\_MALI\_8km\_AntMean,DOE_MALI_8km_AntMean,False,Quad. Non-local,AntMean median,8km,2km,Floating condition,No melt,RO,DA+,HO,No
+16,DOE,MALI,expAE02,CCSM4,DOE\_MALI\_8km\_AntMean,DOE_MALI_8km_AntMean,False,Quad. Non-local,AntMean median,8km,2km,Floating condition,No melt,RO,DA+,HO,No
+17,DOE,MALI,expAE03,HadGEM2,DOE\_MALI\_8km\_AntMean,DOE_MALI_8km_AntMean,False,Quad. Non-local,AntMean median,8km,2km,Floating condition,No melt,RO,DA+,HO,No
+18,DOE,MALI,expAE04,CESM2,DOE\_MALI\_8km\_AntMean,DOE_MALI_8km_AntMean,False,Quad. Non-local,AntMean median,8km,2km,Floating condition,No melt,RO,DA+,HO,No
+19,DOE,MALI,expAE05,UKESM,DOE\_MALI\_8km\_AntMean,DOE_MALI_8km_AntMean,False,Quad. Non-local,AntMean median,8km,2km,Floating condition,No melt,RO,DA+,HO,No
+20,IGE,Elmer/Ice,ctrlAE,ctrl,IGE\_ElmerIce,IGE_ElmerIce,True,PICO,custom,1km,0.5km,No,No melt,Fix,DA,SSA,No
+21,IGE,Elmer/Ice,expAE02,CCSM4,IGE\_ElmerIce,IGE_ElmerIce,True,PICO,custom,1km,0.5km,No,No melt,Fix,DA,SSA,No
+22,IGE,Elmer/Ice,expAE03,HadGEM2,IGE\_ElmerIce,IGE_ElmerIce,True,PICO,custom,1km,0.5km,No,No melt,Fix,DA,SSA,No
+23,IGE,Elmer/Ice,expAE04,CESM2,IGE\_ElmerIce,IGE_ElmerIce,True,PICO,custom,1km,0.5km,No,No melt,Fix,DA,SSA,No
+24,IGE,Elmer/Ice,expAE05,UKESM,IGE\_ElmerIce,IGE_ElmerIce,True,PICO,custom,1km,0.5km,No,No melt,Fix,DA,SSA,No
+25,ILTS,SICOPOLIS,ctrlAE,ctrl,ILTS\_SICOPOLIS,ILTS_SICOPOLIS,True,Quad. Non-local,AntMean median,8km,8km,Floating condition,No melt,MH,SP+,Hybrid,ELRA
+26,ILTS,SICOPOLIS,expAE02,CCSM4,ILTS\_SICOPOLIS,ILTS_SICOPOLIS,True,Quad. Non-local,AntMean median,8km,8km,Floating condition,No melt,MH,SP+,Hybrid,ELRA
+27,ILTS,SICOPOLIS,expAE03,HadGEM2,ILTS\_SICOPOLIS,ILTS_SICOPOLIS,True,Quad. Non-local,AntMean median,8km,8km,Floating condition,No melt,MH,SP+,Hybrid,ELRA
+28,ILTS,SICOPOLIS,expAE04,CESM2,ILTS\_SICOPOLIS,ILTS_SICOPOLIS,True,Quad. Non-local,AntMean median,8km,8km,Floating condition,No melt,MH,SP+,Hybrid,ELRA
+29,ILTS,SICOPOLIS,expAE05,UKESM,ILTS\_SICOPOLIS,ILTS_SICOPOLIS,True,Quad. Non-local,AntMean median,8km,8km,Floating condition,No melt,MH,SP+,Hybrid,ELRA
+30,IMAU,UFEMISM,ctrlAE,ctrl,IMAU\_UFEMISM1,IMAU_UFEMISM1,True,Quad. Local,custom,32km,16km,Floating condition,No melt,Fix,SP+,Hybrid,No
+31,IMAU,UFEMISM,expAE02,CCSM4,IMAU\_UFEMISM1,IMAU_UFEMISM1,True,Quad. Local,custom,32km,16km,Floating condition,No melt,Fix,SP+,Hybrid,No
+32,IMAU,UFEMISM,expAE03,HadGEM2,IMAU\_UFEMISM1,IMAU_UFEMISM1,True,Quad. Local,custom,32km,16km,Floating condition,No melt,Fix,SP+,Hybrid,No
+33,IMAU,UFEMISM,expAE04,CESM2,IMAU\_UFEMISM1,IMAU_UFEMISM1,True,Quad. Local,custom,32km,16km,Floating condition,No melt,Fix,SP+,Hybrid,No
+34,IMAU,UFEMISM,expAE05,UKESM,IMAU\_UFEMISM1,IMAU_UFEMISM1,True,Quad. Local,custom,32km,16km,Floating condition,No melt,Fix,SP+,Hybrid,No
+35,IMAU,UFEMISM,ctrlAE,ctrl,IMAU\_UFEMISM2,IMAU_UFEMISM2,False,Quad. Local,custom,32km,16km,Floating condition,No melt,Fix,SP+,Hybrid,No
+36,IMAU,UFEMISM,expAE02,CCSM4,IMAU\_UFEMISM2,IMAU_UFEMISM2,False,Quad. Local,custom,32km,16km,Floating condition,No melt,Fix,SP+,Hybrid,No
+37,IMAU,UFEMISM,expAE03,HadGEM2,IMAU\_UFEMISM2,IMAU_UFEMISM2,False,Quad. Local,custom,32km,16km,Floating condition,No melt,Fix,SP+,Hybrid,No
+38,IMAU,UFEMISM,expAE04,CESM2,IMAU\_UFEMISM2,IMAU_UFEMISM2,False,Quad. Local,custom,32km,16km,Floating condition,No melt,Fix,SP+,Hybrid,No
+39,IMAU,UFEMISM,expAE05,UKESM,IMAU\_UFEMISM2,IMAU_UFEMISM2,False,Quad. Local,custom,32km,16km,Floating condition,No melt,Fix,SP+,Hybrid,No
+40,IMAU,UFEMISM,ctrlAE,ctrl,IMAU\_UFEMISM3,IMAU_UFEMISM3,False,Quad. Local,custom,16km,8km,Floating condition,No melt,Fix,SP+,Hybrid,No
+41,IMAU,UFEMISM,expAE02,CCSM4,IMAU\_UFEMISM3,IMAU_UFEMISM3,False,Quad. Local,custom,16km,8km,Floating condition,No melt,Fix,SP+,Hybrid,No
+42,IMAU,UFEMISM,expAE03,HadGEM2,IMAU\_UFEMISM3,IMAU_UFEMISM3,False,Quad. Local,custom,16km,8km,Floating condition,No melt,Fix,SP+,Hybrid,No
+43,IMAU,UFEMISM,expAE04,CESM2,IMAU\_UFEMISM3,IMAU_UFEMISM3,False,Quad. Local,custom,16km,8km,Floating condition,No melt,Fix,SP+,Hybrid,No
+44,IMAU,UFEMISM,expAE05,UKESM,IMAU\_UFEMISM3,IMAU_UFEMISM3,False,Quad. Local,custom,16km,8km,Floating condition,No melt,Fix,SP+,Hybrid,No
+45,IMAU,UFEMISM,ctrlAE,ctrl,IMAU\_UFEMISM4,IMAU_UFEMISM4,False,Quad. Local,custom,16km,8km,Floating condition,No melt,Fix,SP+,Hybrid,No
+46,IMAU,UFEMISM,expAE02,CCSM4,IMAU\_UFEMISM4,IMAU_UFEMISM4,False,Quad. Local,custom,16km,8km,Floating condition,No melt,Fix,SP+,Hybrid,No
+47,IMAU,UFEMISM,expAE03,HadGEM2,IMAU\_UFEMISM4,IMAU_UFEMISM4,False,Quad. Local,custom,16km,8km,Floating condition,No melt,Fix,SP+,Hybrid,No
+48,IMAU,UFEMISM,expAE04,CESM2,IMAU\_UFEMISM4,IMAU_UFEMISM4,False,Quad. Local,custom,16km,8km,Floating condition,No melt,Fix,SP+,Hybrid,No
+49,IMAU,UFEMISM,expAE05,UKESM,IMAU\_UFEMISM4,IMAU_UFEMISM4,False,Quad. Local,custom,16km,8km,Floating condition,No melt,Fix,SP+,Hybrid,No
+50,LSCE,Grisli,ctrlAE,ctrl,LSCE\_GRISLI,LSCE_GRISLI,True,Quad. Non-local,AntMean median,16km,16km,Floating condition,Sub-Grid,MH,SP+,Hybrid,No
+51,LSCE,Grisli,expAE02,CCSM4,LSCE\_GRISLI,LSCE_GRISLI,True,Quad. Non-local,AntMean median,16km,16km,Floating condition,Sub-Grid,MH,SP+,Hybrid,No
+52,LSCE,Grisli,expAE03,HadGEM2,LSCE\_GRISLI,LSCE_GRISLI,True,Quad. Non-local,AntMean median,16km,16km,Floating condition,Sub-Grid,MH,SP+,Hybrid,No
+53,LSCE,Grisli,expAE04,CESM2,LSCE\_GRISLI,LSCE_GRISLI,True,Quad. Non-local,AntMean median,16km,16km,Floating condition,Sub-Grid,MH,SP+,Hybrid,No
+54,LSCE,Grisli,expAE05,UKESM,LSCE\_GRISLI,LSCE_GRISLI,True,Quad. Non-local,AntMean median,16km,16km,Floating condition,Sub-Grid,MH,SP+,Hybrid,No
+55,LSCE,Grisli,ctrlAE,ctrl,LSCE\_GRISLI2,LSCE_GRISLI2,False,Quad. Non-local,AntMean median,16km,16km,No,No melt,MH,SP+,Hybrid,No
+56,LSCE,Grisli,expAE02,CCSM4,LSCE\_GRISLI2,LSCE_GRISLI2,False,Quad. Non-local,AntMean median,16km,16km,No,No melt,MH,SP+,Hybrid,No
+57,LSCE,Grisli,expAE03,HadGEM2,LSCE\_GRISLI2,LSCE_GRISLI2,False,Quad. Non-local,AntMean median,16km,16km,No,No melt,MH,SP+,Hybrid,No
+58,LSCE,Grisli,expAE04,CESM2,LSCE\_GRISLI2,LSCE_GRISLI2,False,Quad. Non-local,AntMean median,16km,16km,No,No melt,MH,SP+,Hybrid,No
+59,LSCE,Grisli,expAE05,UKESM,LSCE\_GRISLI2,LSCE_GRISLI2,False,Quad. Non-local,AntMean median,16km,16km,No,No melt,MH,SP+,Hybrid,No
+60,NCAR,CISM,ctrlAE,ctrl,NCAR\_CISM1,NCAR_CISM1,False,Quad. Non-local,AntMean median,4km,2km,Sub-Grid,Sub-Grid,RO,SP+,L1L2,No
+61,NCAR,CISM,expAE02,CCSM4,NCAR\_CISM1,NCAR_CISM1,False,Quad. Non-local,AntMean median,4km,2km,Sub-Grid,Sub-Grid,RO,SP+,L1L2,No
+62,NCAR,CISM,expAE03,HadGEM2,NCAR\_CISM1,NCAR_CISM1,False,Quad. Non-local,AntMean median,4km,2km,Sub-Grid,Sub-Grid,RO,SP+,L1L2,No
+63,NCAR,CISM,expAE04,CESM2,NCAR\_CISM1,NCAR_CISM1,False,Quad. Non-local,AntMean median,4km,2km,Sub-Grid,Sub-Grid,RO,SP+,L1L2,No
+64,NCAR,CISM,expAE05,UKESM,NCAR\_CISM1,NCAR_CISM1,False,Quad. Non-local,AntMean median,4km,2km,Sub-Grid,Sub-Grid,RO,SP+,L1L2,No
+65,NCAR,CISM,ctrlAE,ctrl,NCAR\_CISM2*,NCAR_CISM2,True,Quad. Local,AntMean median,4km,2km,Sub-Grid,Sub-Grid,RO,SP+,L1L2,No
+66,NCAR,CISM,expAE02,CCSM4,NCAR\_CISM2*,NCAR_CISM2,True,Quad. Local,AntMean median,4km,2km,Sub-Grid,Sub-Grid,RO,SP+,L1L2,No
+67,NCAR,CISM,expAE03,HadGEM2,NCAR\_CISM2*,NCAR_CISM2,True,Quad. Local,AntMean median,4km,2km,Sub-Grid,Sub-Grid,RO,SP+,L1L2,No
+68,NCAR,CISM,expAE04,CESM2,NCAR\_CISM2*,NCAR_CISM2,True,Quad. Local,AntMean median,4km,2km,Sub-Grid,Sub-Grid,RO,SP+,L1L2,No
+69,NCAR,CISM,expAE05,UKESM,NCAR\_CISM2*,NCAR_CISM2,True,Quad. Local,AntMean median,4km,2km,Sub-Grid,Sub-Grid,RO,SP+,L1L2,No
+70,NORCE,CISM,ctrlAE,ctrl,NORCE\_CISM2,NORCE_CISM2-MAR364-ERA-t1,False,Quad. Non-local Slope,AntMean median,4km,2km,Floating condition,Sub-Grid,RO,SP+,L1L2,No
+71,NORCE,CISM,expAE02,CCSM4,NORCE\_CISM2,NORCE_CISM2-MAR364-ERA-t1,False,Quad. Non-local Slope,AntMean median,4km,2km,Floating condition,Sub-Grid,RO,SP+,L1L2,No
+72,NORCE,CISM,expAE03,HadGEM2,NORCE\_CISM2,NORCE_CISM2-MAR364-ERA-t1,False,Quad. Non-local Slope,AntMean median,4km,2km,Floating condition,Sub-Grid,RO,SP+,L1L2,No
+73,NORCE,CISM,expAE04,CESM2,NORCE\_CISM2,NORCE_CISM2-MAR364-ERA-t1,False,Quad. Non-local Slope,AntMean median,4km,2km,Floating condition,Sub-Grid,RO,SP+,L1L2,No
+74,NORCE,CISM,expAE05,UKESM,NORCE\_CISM2,NORCE_CISM2-MAR364-ERA-t1,False,Quad. Non-local Slope,AntMean median,4km,2km,Floating condition,Sub-Grid,RO,SP+,L1L2,No
+75,NORCE,CISM,ctrlAE,ctrl,NORCE\_CISM3,NORCE_CISM3-MAR364-ERA-t1,False,Quad. Non-local Slope,AntMean median,8km,4km,Floating condition,Sub-Grid,RO,SP+,L1L2,No
+76,NORCE,CISM,expAE02,CCSM4,NORCE\_CISM3,NORCE_CISM3-MAR364-ERA-t1,False,Quad. Non-local Slope,AntMean median,8km,4km,Floating condition,Sub-Grid,RO,SP+,L1L2,No
+77,NORCE,CISM,expAE03,HadGEM2,NORCE\_CISM3,NORCE_CISM3-MAR364-ERA-t1,False,Quad. Non-local Slope,AntMean median,8km,4km,Floating condition,Sub-Grid,RO,SP+,L1L2,No
+78,NORCE,CISM,expAE04,CESM2,NORCE\_CISM3,NORCE_CISM3-MAR364-ERA-t1,False,Quad. Non-local Slope,AntMean median,8km,4km,Floating condition,Sub-Grid,RO,SP+,L1L2,No
+79,NORCE,CISM,expAE05,UKESM,NORCE\_CISM3,NORCE_CISM3-MAR364-ERA-t1,False,Quad. Non-local Slope,AntMean median,8km,4km,Floating condition,Sub-Grid,RO,SP+,L1L2,No
+80,NORCE,CISM,ctrlAE,ctrl,NORCE\_CISM3\_nonlocal*,NORCE_CISM3-MAR364-ERA-t1-nonlocal,True,Quad. Non-local,AntMean median,8km,4km,Floating condition,Sub-Grid,RO,SP+,L1L2,No
+81,NORCE,CISM,expAE02,CCSM4,NORCE\_CISM3\_nonlocal*,NORCE_CISM3-MAR364-ERA-t1-nonlocal,True,Quad. Non-local,AntMean median,8km,4km,Floating condition,Sub-Grid,RO,SP+,L1L2,No
+82,NORCE,CISM,expAE03,HadGEM2,NORCE\_CISM3\_nonlocal*,NORCE_CISM3-MAR364-ERA-t1-nonlocal,True,Quad. Non-local,AntMean median,8km,4km,Floating condition,Sub-Grid,RO,SP+,L1L2,No
+83,NORCE,CISM,expAE04,CESM2,NORCE\_CISM3\_nonlocal*,NORCE_CISM3-MAR364-ERA-t1-nonlocal,True,Quad. Non-local,AntMean median,8km,4km,Floating condition,Sub-Grid,RO,SP+,L1L2,No
+84,NORCE,CISM,expAE05,UKESM,NORCE\_CISM3\_nonlocal*,NORCE_CISM3-MAR364-ERA-t1-nonlocal,True,Quad. Non-local,AntMean median,8km,4km,Floating condition,Sub-Grid,RO,SP+,L1L2,No
+85,NORCE,CISM,ctrlAE,ctrl,NORCE\_CISM3\_local,NORCE_CISM3-MAR364-ERA-t1-local,False,Quad. Local,AntMean median,8km,4km,Floating condition,Sub-Grid,RO,SP+,L1L2,No
+86,NORCE,CISM,expAE02,CCSM4,NORCE\_CISM3\_local,NORCE_CISM3-MAR364-ERA-t1-local,False,Quad. Local,AntMean median,8km,4km,Floating condition,Sub-Grid,RO,SP+,L1L2,No
+87,NORCE,CISM,expAE03,HadGEM2,NORCE\_CISM3\_local,NORCE_CISM3-MAR364-ERA-t1-local,False,Quad. Local,AntMean median,8km,4km,Floating condition,Sub-Grid,RO,SP+,L1L2,No
+88,NORCE,CISM,expAE04,CESM2,NORCE\_CISM3\_local,NORCE_CISM3-MAR364-ERA-t1-local,False,Quad. Local,AntMean median,8km,4km,Floating condition,Sub-Grid,RO,SP+,L1L2,No
+89,NORCE,CISM,expAE05,UKESM,NORCE\_CISM3\_local,NORCE_CISM3-MAR364-ERA-t1-local,False,Quad. Local,AntMean median,8km,4km,Floating condition,Sub-Grid,RO,SP+,L1L2,No
+90,NORCE,CISM,ctrlAE,ctrl,NORCE\_CISM4,NORCE_CISM4-MAR364-ERA-t1,False,Quad. Non-local Slope,AntMean median,16km,8km,Floating condition,Sub-Grid,RO,SP+,L1L2,No
+91,NORCE,CISM,expAE02,CCSM4,NORCE\_CISM4,NORCE_CISM4-MAR364-ERA-t1,False,Quad. Non-local Slope,AntMean median,16km,8km,Floating condition,Sub-Grid,RO,SP+,L1L2,No
+92,NORCE,CISM,expAE03,HadGEM2,NORCE\_CISM4,NORCE_CISM4-MAR364-ERA-t1,False,Quad. Non-local Slope,AntMean median,16km,8km,Floating condition,Sub-Grid,RO,SP+,L1L2,No
+93,NORCE,CISM,expAE04,CESM2,NORCE\_CISM4,NORCE_CISM4-MAR364-ERA-t1,False,Quad. Non-local Slope,AntMean median,16km,8km,Floating condition,Sub-Grid,RO,SP+,L1L2,No
+94,NORCE,CISM,expAE05,UKESM,NORCE\_CISM4,NORCE_CISM4-MAR364-ERA-t1,False,Quad. Non-local Slope,AntMean median,16km,8km,Floating condition,Sub-Grid,RO,SP+,L1L2,No
+95,NORCE,CISM,ctrlAE,ctrl,NORCE\_CISM4\_nonlocal,NORCE_CISM4-MAR364-ERA-t1-nonlocal,False,Quad. Non-local,AntMean median,16km,8km,Floating condition,Sub-Grid,RO,SP+,L1L2,No
+96,NORCE,CISM,expAE02,CCSM4,NORCE\_CISM4\_nonlocal,NORCE_CISM4-MAR364-ERA-t1-nonlocal,False,Quad. Non-local,AntMean median,16km,8km,Floating condition,Sub-Grid,RO,SP+,L1L2,No
+97,NORCE,CISM,expAE03,HadGEM2,NORCE\_CISM4\_nonlocal,NORCE_CISM4-MAR364-ERA-t1-nonlocal,False,Quad. Non-local,AntMean median,16km,8km,Floating condition,Sub-Grid,RO,SP+,L1L2,No
+98,NORCE,CISM,expAE04,CESM2,NORCE\_CISM4\_nonlocal,NORCE_CISM4-MAR364-ERA-t1-nonlocal,False,Quad. Non-local,AntMean median,16km,8km,Floating condition,Sub-Grid,RO,SP+,L1L2,No
+99,NORCE,CISM,expAE05,UKESM,NORCE\_CISM4\_nonlocal,NORCE_CISM4-MAR364-ERA-t1-nonlocal,False,Quad. Non-local,AntMean median,16km,8km,Floating condition,Sub-Grid,RO,SP+,L1L2,No
+100,NORCE,CISM,ctrlAE,ctrl,NORCE\_CISM4\_local,NORCE_CISM4-MAR364-ERA-t1-local,False,Quad. Local,AntMean median,16km,8km,Floating condition,Sub-Grid,RO,SP+,L1L2,No
+101,NORCE,CISM,expAE02,CCSM4,NORCE\_CISM4\_local,NORCE_CISM4-MAR364-ERA-t1-local,False,Quad. Local,AntMean median,16km,8km,Floating condition,Sub-Grid,RO,SP+,L1L2,No
+102,NORCE,CISM,expAE03,HadGEM2,NORCE\_CISM4\_local,NORCE_CISM4-MAR364-ERA-t1-local,False,Quad. Local,AntMean median,16km,8km,Floating condition,Sub-Grid,RO,SP+,L1L2,No
+103,NORCE,CISM,expAE04,CESM2,NORCE\_CISM4\_local,NORCE_CISM4-MAR364-ERA-t1-local,False,Quad. Local,AntMean median,16km,8km,Floating condition,Sub-Grid,RO,SP+,L1L2,No
+104,NORCE,CISM,expAE05,UKESM,NORCE\_CISM4\_local,NORCE_CISM4-MAR364-ERA-t1-local,False,Quad. Local,AntMean median,16km,8km,Floating condition,Sub-Grid,RO,SP+,L1L2,No
+105,NORCE,CISM,ctrlAE,ctrl,NORCE\_CISM4\_JRA,NORCE_CISM4-MAR364-JRA-t1,False,Quad. Non-local Slope,AntMean median,16km,8km,Floating condition,Sub-Grid,RO,SP+,L1L2,No
+106,NORCE,CISM,expAE02,CCSM4,NORCE\_CISM4\_JRA,NORCE_CISM4-MAR364-JRA-t1,False,Quad. Non-local Slope,AntMean median,16km,8km,Floating condition,Sub-Grid,RO,SP+,L1L2,No
+107,NORCE,CISM,expAE03,HadGEM2,NORCE\_CISM4\_JRA,NORCE_CISM4-MAR364-JRA-t1,False,Quad. Non-local Slope,AntMean median,16km,8km,Floating condition,Sub-Grid,RO,SP+,L1L2,No
+108,NORCE,CISM,expAE04,CESM2,NORCE\_CISM4\_JRA,NORCE_CISM4-MAR364-JRA-t1,False,Quad. Non-local Slope,AntMean median,16km,8km,Floating condition,Sub-Grid,RO,SP+,L1L2,No
+109,NORCE,CISM,expAE05,UKESM,NORCE\_CISM4\_JRA,NORCE_CISM4-MAR364-JRA-t1,False,Quad. Non-local Slope,AntMean median,16km,8km,Floating condition,Sub-Grid,RO,SP+,L1L2,No
+110,NORCE,CISM,ctrlAE,ctrl,NORCE\_CISM5,NORCE_CISM5-MAR364-ERA-t1,False,Quad. Non-local Slope,AntMean median,32km,16km,Floating condition,Sub-Grid,RO,SP+,L1L2,No
+111,NORCE,CISM,expAE02,CCSM4,NORCE\_CISM5,NORCE_CISM5-MAR364-ERA-t1,False,Quad. Non-local Slope,AntMean median,32km,16km,Floating condition,Sub-Grid,RO,SP+,L1L2,No
+112,NORCE,CISM,expAE03,HadGEM2,NORCE\_CISM5,NORCE_CISM5-MAR364-ERA-t1,False,Quad. Non-local Slope,AntMean median,32km,16km,Floating condition,Sub-Grid,RO,SP+,L1L2,No
+113,NORCE,CISM,expAE04,CESM2,NORCE\_CISM5,NORCE_CISM5-MAR364-ERA-t1,False,Quad. Non-local Slope,AntMean median,32km,16km,Floating condition,Sub-Grid,RO,SP+,L1L2,No
+114,NORCE,CISM,expAE05,UKESM,NORCE\_CISM5,NORCE_CISM5-MAR364-ERA-t1,False,Quad. Non-local Slope,AntMean median,32km,16km,Floating condition,Sub-Grid,RO,SP+,L1L2,No
+115,NORCE,CISM,ctrlAE,ctrl,NORCE\_CISM5\_nonlocal,NORCE_CISM5-MAR364-ERA-t1-nonlocal,False,Quad. Non-local,AntMean median,32km,16km,Floating condition,Sub-Grid,RO,SP+,L1L2,No
+116,NORCE,CISM,expAE02,CCSM4,NORCE\_CISM5\_nonlocal,NORCE_CISM5-MAR364-ERA-t1-nonlocal,False,Quad. Non-local,AntMean median,32km,16km,Floating condition,Sub-Grid,RO,SP+,L1L2,No
+117,NORCE,CISM,expAE03,HadGEM2,NORCE\_CISM5\_nonlocal,NORCE_CISM5-MAR364-ERA-t1-nonlocal,False,Quad. Non-local,AntMean median,32km,16km,Floating condition,Sub-Grid,RO,SP+,L1L2,No
+118,NORCE,CISM,expAE04,CESM2,NORCE\_CISM5\_nonlocal,NORCE_CISM5-MAR364-ERA-t1-nonlocal,False,Quad. Non-local,AntMean median,32km,16km,Floating condition,Sub-Grid,RO,SP+,L1L2,No
+119,NORCE,CISM,expAE05,UKESM,NORCE\_CISM5\_nonlocal,NORCE_CISM5-MAR364-ERA-t1-nonlocal,False,Quad. Non-local,AntMean median,32km,16km,Floating condition,Sub-Grid,RO,SP+,L1L2,No
+120,NORCE,CISM,ctrlAE,ctrl,NORCE\_CISM5\_local,NORCE_CISM5-MAR364-ERA-t1-local,False,Quad. Local,AntMean median,32km,16km,Floating condition,Sub-Grid,RO,SP,L1L2,No
+121,NORCE,CISM,expAE02,CCSM4,NORCE\_CISM5\_local,NORCE_CISM5-MAR364-ERA-t1-local,False,Quad. Local,AntMean median,32km,16km,Floating condition,Sub-Grid,RO,SP,L1L2,No
+122,NORCE,CISM,expAE03,HadGEM2,NORCE\_CISM5\_local,NORCE_CISM5-MAR364-ERA-t1-local,False,Quad. Local,AntMean median,32km,16km,Floating condition,Sub-Grid,RO,SP,L1L2,No
+123,NORCE,CISM,expAE04,CESM2,NORCE\_CISM5\_local,NORCE_CISM5-MAR364-ERA-t1-local,False,Quad. Local,AntMean median,32km,16km,Floating condition,Sub-Grid,RO,SP,L1L2,No
+124,NORCE,CISM,expAE05,UKESM,NORCE\_CISM5\_local,NORCE_CISM5-MAR364-ERA-t1-local,False,Quad. Local,AntMean median,32km,16km,Floating condition,Sub-Grid,RO,SP,L1L2,No
+125,PIK,PISM,ctrlAE,ctrl,PIK_PISM,PIK_PISM,True,PICO,custom,8km,4km,Floating condition,No melt,StR,SP+,Hybrid,No
+126,PIK,PISM,expAE02,CCSM4,PIK_PISM,PIK_PISM,True,PICO,custom,8km,4km,Floating condition,No melt,StR,SP+,Hybrid,No
+127,PIK,PISM,expAE03,HadGEM2,PIK_PISM,PIK_PISM,True,PICO,custom,8km,4km,Floating condition,No melt,StR,SP+,Hybrid,No
+128,PIK,PISM,expAE04,CESM2,PIK_PISM,PIK_PISM,True,PICO,custom,8km,4km,Floating condition,No melt,StR,SP+,Hybrid,No
+129,PIK,PISM,expAE05,UKESM,PIK_PISM,PIK_PISM,True,PICO,custom,8km,4km,Floating condition,No melt,StR,SP+,Hybrid,No
+130,UGM,Yelmo,ctrlAE,ctrl,UCM\_Yelmo,UCM_Yelmo,True,Quad. Non-local,AntMean median,16km,8km,Sub-Grid,Sub-Grid,VM,DA,L1L2,ELRA
+131,UGM,Yelmo,expAE02,CCSM4,UCM\_Yelmo,UCM_Yelmo,True,Quad. Non-local,AntMean median,16km,8km,Sub-Grid,Sub-Grid,VM,DA,L1L2,ELRA
+132,UGM,Yelmo,expAE03,HadGEM2,UCM\_Yelmo,UCM_Yelmo,True,Quad. Non-local,AntMean median,16km,8km,Sub-Grid,Sub-Grid,VM,DA,L1L2,ELRA
+133,UGM,Yelmo,expAE04,CESM2,UCM\_Yelmo,UCM_Yelmo,True,Quad. Non-local,AntMean median,16km,8km,Sub-Grid,Sub-Grid,VM,DA,L1L2,ELRA
+134,UGM,Yelmo,expAE05,UKESM,UCM\_Yelmo,UCM_Yelmo,True,Quad. Non-local,AntMean median,16km,8km,Sub-Grid,Sub-Grid,VM,DA,L1L2,ELRA
+135,UCSD,ISSM,ctrlAE,ctrl,UCSD\_ISSM,UCSD_ISSM,True,PICOP,custom,1km,0.5km,Sub-Grid,No melt,Fix,DA*,SSA,No
+136,UCSD,ISSM,expAE02,CCSM4,UCSD\_ISSM,UCSD_ISSM,True,PICOP,custom,1km,0.5km,Sub-Grid,No melt,Fix,DA*,SSA,No
+137,UCSD,ISSM,expAE03,HadGEM2,UCSD\_ISSM,UCSD_ISSM,True,PICOP,custom,1km,0.5km,Sub-Grid,No melt,Fix,DA*,SSA,No
+138,UCSD,ISSM,expAE04,CESM2,UCSD\_ISSM,UCSD_ISSM,True,PICOP,custom,1km,0.5km,Sub-Grid,No melt,Fix,DA*,SSA,No
+139,UCSD,ISSM,expAE05,UKESM,UCSD\_ISSM,UCSD_ISSM,True,PICOP,custom,1km,0.5km,Sub-Grid,No melt,Fix,DA*,SSA,No
+140,ULB,Kori,ctrlAE,ctrl,ULB\_Kori1,ULB_fETISh-KoriBU1,True,PICO,custom,16km,16km,No,No melt,Div,DA*,Hybrid,ELRA
+141,ULB,Kori,expAE02,CCSM4,ULB\_Kori1,ULB_fETISh-KoriBU1,True,PICO,custom,16km,16km,No,No melt,Div,DA*,Hybrid,ELRA
+142,ULB,Kori,expAE03,HadGEM2,ULB\_Kori1,ULB_fETISh-KoriBU1,True,PICO,custom,16km,16km,No,No melt,Div,DA*,Hybrid,ELRA
+143,ULB,Kori,expAE04,CESM2,ULB\_Kori1,ULB_fETISh-KoriBU1,True,PICO,custom,16km,16km,No,No melt,Div,DA*,Hybrid,ELRA
+144,ULB,Kori,expAE05,UKESM,ULB\_Kori1,ULB_fETISh-KoriBU1,True,PICO,custom,16km,16km,No,No melt,Div,DA*,Hybrid,ELRA
+145,ULB,Kori,ctrlAE,ctrl,ULB\_Kori2,ULB_fETISh-KoriBU2,False,Quad. Non-local,AntMean median,16km,16km,No,No melt,Div,DA,Hybrid,ELRA
+146,ULB,Kori,expAE02,CCSM4,ULB\_Kori2,ULB_fETISh-KoriBU2,False,Quad. Non-local,AntMean median,16km,16km,No,No melt,Div,DA,Hybrid,ELRA
+147,ULB,Kori,expAE03,HadGEM2,ULB\_Kori2,ULB_fETISh-KoriBU2,False,Quad. Non-local,AntMean median,16km,16km,No,No melt,Div,DA,Hybrid,ELRA
+148,ULB,Kori,expAE04,CESM2,ULB\_Kori2,ULB_fETISh-KoriBU2,False,Quad. Non-local,AntMean median,16km,16km,No,No melt,Div,DA,Hybrid,ELRA
+149,ULB,Kori,expAE05,UKESM,ULB\_Kori2,ULB_fETISh-KoriBU2,False,Quad. Non-local,AntMean median,16km,16km,No,No melt,Div,DA,Hybrid,ELRA
+150,UNN,Úa,ctrlAE,ctrl,UNN\_'Ua,UNN_Ua,True,Quad. Local,AntMean median,1km,0.5km,No,No melt,RO,DA,SSA,No
+151,UNN,Úa,expAE02,CCSM4,UNN\_'Ua,UNN_Ua,True,Quad. Local,AntMean median,1km,0.5km,No,No melt,RO,DA,SSA,No
+152,UNN,Úa,expAE03,HadGEM2,UNN\_'Ua,UNN_Ua,True,Quad. Local,AntMean median,1km,0.5km,No,No melt,RO,DA,SSA,No
+153,UNN,Úa,expAE04,CESM2,UNN\_'Ua,UNN_Ua,True,Quad. Local,AntMean median,1km,0.5km,No,No melt,RO,DA,SSA,No
+154,UNN,Úa,expAE05,UKESM,UNN\_'Ua,UNN_Ua,True,Quad. Local,AntMean median,1km,0.5km,No,No melt,RO,DA,SSA,No
+155,UTAS,Elmer/Ice,ctrlAE,ctrl,UTAS\_ElmerIce,UTAS_ElmerIce,True,Quad. Local,AntMean median,1km,0.5km,Sub-Grid,No melt,Fix,SP,SSA,No
+156,UTAS,Elmer/Ice,expAE02,CCSM4,UTAS\_ElmerIce,UTAS_ElmerIce,True,Quad. Local,AntMean median,1km,0.5km,Sub-Grid,No melt,Fix,SP,SSA,No
+157,UTAS,Elmer/Ice,expAE03,HadGEM2,UTAS\_ElmerIce,UTAS_ElmerIce,True,Quad. Local,AntMean median,1km,0.5km,Sub-Grid,No melt,Fix,SP,SSA,No
+158,UTAS,Elmer/Ice,expAE04,CESM2,UTAS\_ElmerIce,UTAS_ElmerIce,True,Quad. Local,AntMean median,1km,0.5km,Sub-Grid,No melt,Fix,SP,SSA,No
+159,UTAS,Elmer/Ice,expAE05,UKESM,UTAS\_ElmerIce,UTAS_ElmerIce,True,Quad. Local,AntMean median,1km,0.5km,Sub-Grid,No melt,Fix,SP,SSA,No
+160,VUB,AISMPALEO,ctrlAE,ctrl,VUB\_AISMPALEO,VUB_AISMPALEO,True,Quad. Non-local,custom,16km,16km,N/A,No melt,MH,SP,SIA+SSA,No
+161,VUB,AISMPALEO,expAE02,CCSM4,VUB\_AISMPALEO,VUB_AISMPALEO,True,Quad. Non-local,custom,16km,16km,N/A,No melt,MH,SP,SIA+SSA,No
+162,VUB,AISMPALEO,expAE03,HadGEM2,VUB\_AISMPALEO,VUB_AISMPALEO,True,Quad. Non-local,custom,16km,16km,N/A,No melt,MH,SP,SIA+SSA,No
+163,VUB,AISMPALEO,expAE04,CESM2,VUB\_AISMPALEO,VUB_AISMPALEO,True,Quad. Non-local,custom,16km,16km,N/A,No melt,MH,SP,SIA+SSA,No
+164,VUB,AISMPALEO,expAE05,UKESM,VUB\_AISMPALEO,VUB_AISMPALEO,True,Quad. Non-local,custom,16km,16km,N/A,No melt,MH,SP,SIA+SSA,No
+165,VUW,PISM,ctrlAE,ctrl,VUW\_PISM1,VUW_PISM1,True,Lin,custom,8km,4km,No,No melt,StR,SP,Hybrid,VE
+166,VUW,PISM,expAE02,CCSM4,VUW\_PISM1,VUW_PISM1,True,Lin,custom,8km,4km,No,No melt,StR,SP,Hybrid,VE
+167,VUW,PISM,expAE03,HadGEM2,VUW\_PISM1,VUW_PISM1,True,Lin,custom,8km,4km,No,No melt,StR,SP,Hybrid,VE
+168,VUW,PISM,expAE04,CESM2,VUW\_PISM1,VUW_PISM1,True,Lin,custom,8km,4km,No,No melt,StR,SP,Hybrid,VE
+169,VUW,PISM,expAE05,UKESM,VUW\_PISM1,VUW_PISM1,True,Lin,custom,8km,4km,No,No melt,StR,SP,Hybrid,VE
+170,VUW,PISM,ctrlAE,ctrl,VUW\_PISM1\_s1,VUW_PISM1_s1,False,Lin,custom,8km,4km,No,No melt,StR,SP,Hybrid,VE
+171,VUW,PISM,expAE02,CCSM4,VUW\_PISM1\_s1,VUW_PISM1_s1,False,Lin,custom,8km,4km,No,No melt,StR,SP,Hybrid,VE
+172,VUW,PISM,expAE03,HadGEM2,VUW\_PISM1\_s1,VUW_PISM1_s1,False,Lin,custom,8km,4km,No,No melt,StR,SP,Hybrid,VE
+173,VUW,PISM,expAE04,CESM2,VUW\_PISM1\_s1,VUW_PISM1_s1,False,Lin,custom,8km,4km,No,No melt,StR,SP,Hybrid,VE
+174,VUW,PISM,expAE05,UKESM,VUW\_PISM1\_s1,VUW_PISM1_s1,False,Lin,custom,8km,4km,No,No melt,StR,SP,Hybrid,VE
+175,VUW,PISM,ctrlAE,ctrl,VUW\_PISM1\_s2,VUW_PISM1_s2,False,Lin,custom,8km,4km,No,No melt,StR,SP,Hybrid,VE
+176,VUW,PISM,expAE02,CCSM4,VUW\_PISM1\_s2,VUW_PISM1_s2,False,Lin,custom,8km,4km,No,No melt,StR,SP,Hybrid,VE
+177,VUW,PISM,expAE03,HadGEM2,VUW\_PISM1\_s2,VUW_PISM1_s2,False,Lin,custom,8km,4km,No,No melt,StR,SP,Hybrid,VE
+178,VUW,PISM,expAE04,CESM2,VUW\_PISM1\_s2,VUW_PISM1_s2,False,Lin,custom,8km,4km,No,No melt,StR,SP,Hybrid,VE
+179,VUW,PISM,expAE05,UKESM,VUW\_PISM1\_s2,VUW_PISM1_s2,False,Lin,custom,8km,4km,No,No melt,StR,SP,Hybrid,VE
+180,VUW,PISM,ctrlAE,ctrl,VUW\_PISM1\_s3,VUW_PISM1_s3,False,Lin,custom,8km,4km,No,No melt,StR,SP,Hybrid,VE
+181,VUW,PISM,expAE02,CCSM4,VUW\_PISM1\_s3,VUW_PISM1_s3,False,Lin,custom,8km,4km,No,No melt,StR,SP,Hybrid,VE
+182,VUW,PISM,expAE03,HadGEM2,VUW\_PISM1\_s3,VUW_PISM1_s3,False,Lin,custom,8km,4km,No,No melt,StR,SP,Hybrid,VE
+183,VUW,PISM,expAE04,CESM2,VUW\_PISM1\_s3,VUW_PISM1_s3,False,Lin,custom,8km,4km,No,No melt,StR,SP,Hybrid,VE
+184,VUW,PISM,expAE05,UKESM,VUW\_PISM1\_s3,VUW_PISM1_s3,False,Lin,custom,8km,4km,No,No melt,StR,SP,Hybrid,VE
+185,VUW,PISM,ctrlAE,ctrl,VUW\_PISM1\_s4,VUW_PISM1_s4,False,Lin,custom,8km,4km,No,No melt,StR,SP,Hybrid,VE
+186,VUW,PISM,expAE02,CCSM4,VUW\_PISM1\_s4,VUW_PISM1_s4,False,Lin,custom,8km,4km,No,No melt,StR,SP,Hybrid,VE
+187,VUW,PISM,expAE03,HadGEM2,VUW\_PISM1\_s4,VUW_PISM1_s4,False,Lin,custom,8km,4km,No,No melt,StR,SP,Hybrid,VE
+188,VUW,PISM,expAE04,CESM2,VUW\_PISM1\_s4,VUW_PISM1_s4,False,Lin,custom,8km,4km,No,No melt,StR,SP,Hybrid,VE
+189,VUW,PISM,expAE05,UKESM,VUW\_PISM1\_s4,VUW_PISM1_s4,False,Lin,custom,8km,4km,No,No melt,StR,SP,Hybrid,VE
+190,VUW,PISM,ctrlAE,ctrl,VUW\_PISM2,VUW_PISM2,False,Lin,custom,8km,4km,Yes,Sub-Grid,StR,SP,Hybrid,VE
+191,VUW,PISM,expAE02,CCSM4,VUW\_PISM2,VUW_PISM2,False,Lin,custom,8km,4km,Yes,Sub-Grid,StR,SP,Hybrid,VE
+192,VUW,PISM,expAE03,HadGEM2,VUW\_PISM2,VUW_PISM2,False,Lin,custom,8km,4km,Yes,Sub-Grid,StR,SP,Hybrid,VE
+193,VUW,PISM,expAE04,CESM2,VUW\_PISM2,VUW_PISM2,False,Lin,custom,8km,4km,Yes,Sub-Grid,StR,SP,Hybrid,VE
+194,VUW,PISM,expAE05,UKESM,VUW\_PISM2,VUW_PISM2,False,Lin,custom,8km,4km,Yes,Sub-Grid,StR,SP,Hybrid,VE
+195,VUW,PISM,ctrlAE,ctrl,VUW\_PISM2\_s1,VUW_PISM2_s1,False,Lin,custom,8km,4km,Yes,Sub-Grid,StR,SP,Hybrid,VE
+196,VUW,PISM,expAE02,CCSM4,VUW\_PISM2\_s1,VUW_PISM2_s1,False,Lin,custom,8km,4km,Yes,Sub-Grid,StR,SP,Hybrid,VE
+197,VUW,PISM,expAE03,HadGEM2,VUW\_PISM2\_s1,VUW_PISM2_s1,False,Lin,custom,8km,4km,Yes,Sub-Grid,StR,SP,Hybrid,VE
+198,VUW,PISM,expAE04,CESM2,VUW\_PISM2\_s1,VUW_PISM2_s1,False,Lin,custom,8km,4km,Yes,Sub-Grid,StR,SP,Hybrid,VE
+199,VUW,PISM,expAE05,UKESM,VUW\_PISM2\_s1,VUW_PISM2_s1,False,Lin,custom,8km,4km,Yes,Sub-Grid,StR,SP,Hybrid,VE
+200,VUW,PISM,ctrlAE,ctrl,VUW\_PISM2\_s2,VUW_PISM2_s2,False,Lin,custom,8km,4km,Yes,Sub-Grid,StR,SP,Hybrid,VE
+201,VUW,PISM,expAE02,CCSM4,VUW\_PISM2\_s2,VUW_PISM2_s2,False,Lin,custom,8km,4km,Yes,Sub-Grid,StR,SP,Hybrid,VE
+202,VUW,PISM,expAE03,HadGEM2,VUW\_PISM2\_s2,VUW_PISM2_s2,False,Lin,custom,8km,4km,Yes,Sub-Grid,StR,SP,Hybrid,VE
+203,VUW,PISM,expAE04,CESM2,VUW\_PISM2\_s2,VUW_PISM2_s2,False,Lin,custom,8km,4km,Yes,Sub-Grid,StR,SP,Hybrid,VE
+204,VUW,PISM,expAE05,UKESM,VUW\_PISM2\_s2,VUW_PISM2_s2,False,Lin,custom,8km,4km,Yes,Sub-Grid,StR,SP,Hybrid,VE
+205,VUW,PISM,ctrlAE,ctrl,VUW\_PISM2\_s3,VUW_PISM2_s3,False,Lin,custom,8km,4km,Yes,Sub-Grid,StR,SP,Hybrid,VE
+206,VUW,PISM,expAE02,CCSM4,VUW\_PISM2\_s3,VUW_PISM2_s3,False,Lin,custom,8km,4km,Yes,Sub-Grid,StR,SP,Hybrid,VE
+207,VUW,PISM,expAE03,HadGEM2,VUW\_PISM2\_s3,VUW_PISM2_s3,False,Lin,custom,8km,4km,Yes,Sub-Grid,StR,SP,Hybrid,VE
+208,VUW,PISM,expAE04,CESM2,VUW\_PISM2\_s3,VUW_PISM2_s3,False,Lin,custom,8km,4km,Yes,Sub-Grid,StR,SP,Hybrid,VE
+209,VUW,PISM,expAE05,UKESM,VUW\_PISM2\_s3,VUW_PISM2_s3,False,Lin,custom,8km,4km,Yes,Sub-Grid,StR,SP,Hybrid,VE
+210,VUW,PISM,ctrlAE,ctrl,VUW\_PISM2\_s4,VUW_PISM2_s4,False,Lin,custom,8km,4km,Yes,Sub-Grid,StR,SP,Hybrid,VE
+211,VUW,PISM,expAE02,CCSM4,VUW\_PISM2\_s4,VUW_PISM2_s4,False,Lin,custom,8km,4km,Yes,Sub-Grid,StR,SP,Hybrid,VE
+212,VUW,PISM,expAE03,HadGEM2,VUW\_PISM2\_s4,VUW_PISM2_s4,False,Lin,custom,8km,4km,Yes,Sub-Grid,StR,SP,Hybrid,VE
+213,VUW,PISM,expAE04,CESM2,VUW\_PISM2\_s4,VUW_PISM2_s4,False,Lin,custom,8km,4km,Yes,Sub-Grid,StR,SP,Hybrid,VE
+214,VUW,PISM,expAE05,UKESM,VUW\_PISM2\_s4,VUW_PISM2_s4,False,Lin,custom,8km,4km,Yes,Sub-Grid,StR,SP,Hybrid,VE
