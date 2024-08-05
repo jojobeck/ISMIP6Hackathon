@@ -34,6 +34,10 @@ metadata = readtable("../../data_preprocessing/Metadata_IceFront_InitMethod_GIA_
 % metadata(i,'MeltParameterisation')
 % metadata.MeltParameterisation(i)
 
+%%
+yearlen = 360*24*60*60; %FIXME 360 day year OK?
+
+
 %% Load data 
 
 sector = "Wilkes" ;% "FRIS", %"RIS", "ASE", "Aurora", "Wilkes"
@@ -68,7 +72,7 @@ for iexp=1:length(metadata.Model)
             data2=ncread(filename,append(varn+"_sector_6")) ; 
             data = data1+data2;
         else
-            fprintf("No sector selected (correctly), loading whole AIS ")
+            %fprintf("No sector selected (correctly), loading whole AIS ")
             data=ncread(filename,append(varn)) ; 
        end;
         
@@ -102,6 +106,7 @@ ice_alltimeseries = {};
 climate_alltimeseries = {};
 calving_alltimeseries = {};
 meltsens_alltimeseries = {};
+meltsens_alltimeseries_values = {};
 meltparameterisation_alltimeseries = {};
 meltparameters_alltimeseries = {};
 glresolution_alltimeseries = {};
@@ -155,7 +160,7 @@ for iexp=1:length(metadata.Model)
         
         if strcmp(sector, "ASE")
             sens = ms.melt_sensetivity_Amundsen(i); 
-            small_sens = mean(ms.melt_sensetivity_Amundsen) ; %- std(ms.melt_sensetivity_Amundsen)/2; % smaller than mean - half a standard deviation
+            small_sens = mean(ms.melt_sensetivity_Amundsen) - std(ms.melt_sensetivity_Amundsen)/2; % smaller than mean - half a standard deviation
             large_sens = mean(ms.melt_sensetivity_Amundsen) + std(ms.melt_sensetivity_Amundsen)/2;
         elseif strcmp(sector,"Aurora") % FIXME WHOLE EAIS
             sens = ms.melt_sensetivity_EastAntarctica(i);
@@ -174,7 +179,7 @@ for iexp=1:length(metadata.Model)
             small_sens = mean(ms.melt_sensetivity_Ross) - std(ms.melt_sensetivity_Ross)/2; % smaller than mean - half a standard deviation
             large_sens = mean(ms.melt_sensetivity_Ross) + std(ms.melt_sensetivity_Ross)/2;
         else
-            fprintf("No sector selected (correctly), loading whole AIS ")
+            %fprintf("No sector selected (correctly), loading whole AIS ")
             sens = ms.melt_sensetivity_AIS(i); 
             small_sens = mean(ms.melt_sensetivity_AIS) - std(ms.melt_sensetivity_AIS)/2; % smaller than mean - half a standard deviation
             large_sens = mean(ms.melt_sensetivity_AIS) + std(ms.melt_sensetivity_AIS)/2;
@@ -182,11 +187,12 @@ for iexp=1:length(metadata.Model)
 
         if sens <= small_sens
              sens_group='low melt sensitivity';
-        %elseif sens <= large_sens
-        %    sens_group='medium melt sensivity';
+        elseif sens <= large_sens
+            sens_group='medium melt sensivity';
         else 
              sens_group='high melt sensitivity';
         end
+        meltsens_alltimeseries_values{end+1} = sens; 
         meltsens_alltimeseries{end+1}=sens_group;
                 
         % Define calving groups based on calving criertia
@@ -256,22 +262,23 @@ for iexp=1:length(metadata.Model)
 end
 
 
-
+%
 % Print number of members in a bin?
 
 
-%% 3-way ANOVA
+
+% 3-way ANOVA
 
 % select groups for 3-way anova
 g1_alltimeseries = climate_alltimeseries;
 %g1_alltimeseries = init_alltimeseries;
-%g2_alltimeseries = meltsens_alltimeseries;
-g3_alltimeseries = calving_alltimeseries; 
-%g3_alltimeseries = ice_alltimeseries; 
+g2_alltimeseries = meltsens_alltimeseries;
+%g3_alltimeseries = calving_alltimeseries; 
+g3_alltimeseries = ice_alltimeseries; 
 %g3_alltimeseries = resolution_alltimeseries; 
 %g3_alltimeseries = glresolution_alltimeseries; 
 %g3_alltimeseries = subglmelt_alltimeseries; 
-g2_alltimeseries = meltparameterisation_alltimeseries; 
+%g2_alltimeseries = meltparameterisation_alltimeseries; 
 %g3_alltimeseries = init_alltimeseries;
 %g3_alltimeseries = gia_alltimeseries; 
 %g3_alltimeseries = stressbalance_alltimeseries;
@@ -290,7 +297,8 @@ g2_alltimeseries = meltparameterisation_alltimeseries;
 %titlestring = 'var: , g1: climate, g2: melt sens, g3: init method'
 %titlestring = 'var: , g1: climate, g2: melt sens, g3: gia'
 %titlestring = 'var: , g1: climate, g2: melt sens, g3: stress balance'
-titlestring = 'var: cum BMR, g1: climate, g2: melt param, g3: calving'
+%titlestring = 'var: cum BMR, g1: climate, g2: melt param, g3: calving'
+%titlestring = 'var: cum BMR, g1: climate, g2: melt param, g3: ice model'
 
 
 
@@ -307,7 +315,7 @@ var_error=zeros(285,1);
 
 for yeari=2:285,
 		individual_results=data_alltimeseries(:,yeari);
-		[p,tabl]=anovan(individual_results,{g1_alltimeseries,g2_alltimeseries,g3_alltimeseries},...
+		[p,tabl,stats]=anovan(individual_results,{g1_alltimeseries,g2_alltimeseries,g3_alltimeseries},...
 			'model',2,'display','off', 'sstype', 1) ;
 		var_g1(yeari)=tabl{2,2}/length(g1_alltimeseries);
 		var_g2(yeari)=tabl{3,2}/length(g1_alltimeseries);
@@ -380,6 +388,26 @@ pos = get(h,'Position');
 
 title(titlestring)
 
+
+%%
+% figure; hold all;
+% for i=1:length(meltsens_alltimeseries_values)
+%     scatter(i,meltsens_alltimeseries_values{i})
+%     text(i,meltsens_alltimeseries_values{i}, meltparameterisation_alltimeseries{i})
+% end
+
+figure; hold all;
+for i=1:length(meltsens_alltimeseries_values)
+    scatter(i,data_alltimeseries(i,85))
+    text(i,data_alltimeseries(i,85), meltsens_alltimeseries{i})
+end
+
+% 
+% figure; hold all;
+% for i=1:length(meltsens_alltimeseries_values)
+%     plot(data_alltimeseries(i,:))
+%     %text(i,data_alltimeseries(i,85), meltsens_alltimeseries{i})
+% end
 
 %%
 
