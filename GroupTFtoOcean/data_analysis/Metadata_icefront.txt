@@ -4,21 +4,21 @@
 2,DC,ISSM,expAE03,HadGEM2,DC\_ISSM,DC_ISSM,True,Quad. Non-local,AntMean median,4km,4km,Sub-Grid,Sub-Grid,MH
 3,DC,ISSM,expAE04,CESM2,DC\_ISSM,DC_ISSM,True,Quad. Non-local,AntMean median,4km,4km,Sub-Grid,Sub-Grid,MH
 4,DC,ISSM,expAE05,UKESM,DC\_ISSM,DC_ISSM,True,Quad. Non-local,AntMean median,4km,4km,Sub-Grid,Sub-Grid,MH
-5,DOE,MALI,ctrlAE,ctrl,DOE\_MALI\_4km,DOE_MALI_4km,True,Quad. Non-local,AntMean median,4km,2km,Floating condition,No melt,RO
-6,DOE,MALI,expAE02,CCSM4,DOE\_MALI\_4km,DOE_MALI_4km,True,Quad. Non-local,AntMean median,4km,2km,Floating condition,No melt,RO
-7,DOE,MALI,expAE03,HadGEM2,DOE\_MALI\_4km,DOE_MALI_4km,True,Quad. Non-local,AntMean median,4km,2km,Floating condition,No melt,RO
-8,DOE,MALI,expAE04,CESM2,DOE\_MALI\_4km,DOE_MALI_4km,True,Quad. Non-local,AntMean median,4km,2km,Floating condition,No melt,RO
-9,DOE,MALI,expAE05,UKESM,DOE\_MALI\_4km,DOE_MALI_4km,True,Quad. Non-local,AntMean median,4km,2km,Floating condition,No melt,RO
-10,DOE,MALI,ctrlAE,ctrl,DOE\_MALI\_8km\_Ant95,DOE_MALI_8km_Ant95,False,Quad. Non-local,AntMean 95th,8km,2km,Floating condition,No melt,RO
-11,DOE,MALI,expAE02,CCSM4,DOE\_MALI\_8km\_Ant95,DOE_MALI_8km_Ant95,False,Quad. Non-local,AntMean 95th,8km,2km,Floating condition,No melt,RO
-12,DOE,MALI,expAE03,HadGEM2,DOE\_MALI\_8km\_Ant95,DOE_MALI_8km_Ant95,False,Quad. Non-local,AntMean 95th,8km,2km,Floating condition,No melt,RO
-13,DOE,MALI,expAE04,CESM2,DOE\_MALI\_8km\_Ant95,DOE_MALI_8km_Ant95,False,Quad. Non-local,AntMean 95th,8km,2km,Floating condition,No melt,RO
-14,DOE,MALI,expAE05,UKESM,DOE\_MALI\_8km\_Ant95,DOE_MALI_8km_Ant95,False,Quad. Non-local,AntMean 95th,8km,2km,Floating condition,No melt,RO
-15,DOE,MALI,ctrlAE,ctrl,DOE\_MALI\_8km\_AntMean,DOE_MALI_8km_AntMean,False,Quad. Non-local,AntMean median,8km,2km,Floating condition,No melt,RO
-16,DOE,MALI,expAE02,CCSM4,DOE\_MALI\_8km\_AntMean,DOE_MALI_8km_AntMean,False,Quad. Non-local,AntMean median,8km,2km,Floating condition,No melt,RO
-17,DOE,MALI,expAE03,HadGEM2,DOE\_MALI\_8km\_AntMean,DOE_MALI_8km_AntMean,False,Quad. Non-local,AntMean median,8km,2km,Floating condition,No melt,RO
-18,DOE,MALI,expAE04,CESM2,DOE\_MALI\_8km\_AntMean,DOE_MALI_8km_AntMean,False,Quad. Non-local,AntMean median,8km,2km,Floating condition,No melt,RO
-19,DOE,MALI,expAE05,UKESM,DOE\_MALI\_8km\_AntMean,DOE_MALI_8km_AntMean,False,Quad. Non-local,AntMean median,8km,2km,Floating condition,No melt,RO
+5,DOE,MALI,ctrlAE,ctrl,DOE\_MALI\_4km,DOE_MALI_1,True,Quad. Non-local,AntMean median,4km,2km,Floating condition,No melt,RO
+6,DOE,MALI,expAE02,CCSM4,DOE\_MALI\_4km,DOE_MALI_1,True,Quad. Non-local,AntMean median,4km,2km,Floating condition,No melt,RO
+7,DOE,MALI,expAE03,HadGEM2,DOE\_MALI\_4km,DOE_MALI_1,True,Quad. Non-local,AntMean median,4km,2km,Floating condition,No melt,RO
+8,DOE,MALI,expAE04,CESM2,DOE\_MALI\_4km,DOE_MALI_1,True,Quad. Non-local,AntMean median,4km,2km,Floating condition,No melt,RO
+9,DOE,MALI,expAE05,UKESM,DOE\_MALI\_4km,DOE_MALI_1,True,Quad. Non-local,AntMean median,4km,2km,Floating condition,No melt,RO
+10,DOE,MALI,ctrlAE,ctrl,DOE\_MALI\_8km\_Ant95,DOE_MALI_3,False,Quad. Non-local,AntMean 95th,8km,2km,Floating condition,No melt,RO
+11,DOE,MALI,expAE02,CCSM4,DOE\_MALI\_8km\_Ant95,DOE_MALI_3,False,Quad. Non-local,AntMean 95th,8km,2km,Floating condition,No melt,RO
+12,DOE,MALI,expAE03,HadGEM2,DOE\_MALI\_8km\_Ant95,DOE_MALI_3,False,Quad. Non-local,AntMean 95th,8km,2km,Floating condition,No melt,RO
+13,DOE,MALI,expAE04,CESM2,DOE\_MALI\_8km\_Ant95,DOE_MALI_3,False,Quad. Non-local,AntMean 95th,8km,2km,Floating condition,No melt,RO
+14,DOE,MALI,expAE05,UKESM,DOE\_MALI\_8km\_Ant95,DOE_MALI_3,False,Quad. Non-local,AntMean 95th,8km,2km,Floating condition,No melt,RO
+15,DOE,MALI,ctrlAE,ctrl,DOE\_MALI\_8km\_AntMean,DOE_MALI_2,False,Quad. Non-local,AntMean median,8km,2km,Floating condition,No melt,RO
+16,DOE,MALI,expAE02,CCSM4,DOE\_MALI\_8km\_AntMean,DOE_MALI_2,False,Quad. Non-local,AntMean median,8km,2km,Floating condition,No melt,RO
+17,DOE,MALI,expAE03,HadGEM2,DOE\_MALI\_8km\_AntMean,DOE_MALI_2,False,Quad. Non-local,AntMean median,8km,2km,Floating condition,No melt,RO
+18,DOE,MALI,expAE04,CESM2,DOE\_MALI\_8km\_AntMean,DOE_MALI_2,False,Quad. Non-local,AntMean median,8km,2km,Floating condition,No melt,RO
+19,DOE,MALI,expAE05,UKESM,DOE\_MALI\_8km\_AntMean,DOE_MALI_2,False,Quad. Non-local,AntMean median,8km,2km,Floating condition,No melt,RO
 20,IGE,Elmer/Ice,ctrlAE,ctrl,IGE\_ElmerIce,IGE_ElmerIce,True,PICO,custom,1km,0.5km,No,No melt,Fix
 21,IGE,Elmer/Ice,expAE02,CCSM4,IGE\_ElmerIce,IGE_ElmerIce,True,PICO,custom,1km,0.5km,No,No melt,Fix
 22,IGE,Elmer/Ice,expAE03,HadGEM2,IGE\_ElmerIce,IGE_ElmerIce,True,PICO,custom,1km,0.5km,No,No melt,Fix
