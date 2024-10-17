@@ -94,7 +94,7 @@ save("data/data_alltimeseries_"+sector+"_cumBMR.mat", 'data_alltimeseries');
 %save("data/time_"+sector+".mat")
 
 %% Load data if you want to skip the part before
-sector = "ASE" ;% "FRIS", %"RIS", "ASE", "Aurora", "Wilkes"
+sector = "AIS" ;% "FRIS", %"RIS", "ASE", "Aurora", "Wilkes"
 
 data_alltimeseries = load("data/data_alltimeseries_"+sector+"_cumBMR.mat", 'data_alltimeseries').data_alltimeseries;
 
@@ -204,8 +204,8 @@ for iexp=1:length(metadata.Model)
         elseif sum(i2)>0
             calving_alltimeseries{end+1}='Weak calving';
         elseif sum(i3)>0
-            %calving_alltimeseries{end+1}='No calving';
-            calving_alltimeseries{end+1}='Weak calving';
+            calving_alltimeseries{end+1}='No calving';
+            %calving_alltimeseries{end+1}='Weak calving';
         else
             error('no calving group assigned');
         end;
@@ -265,20 +265,20 @@ end
 %
 % Print number of members in a bin?
 
-
+%%
 
 % 3-way ANOVA
 
 % select groups for 3-way anova
 g1_alltimeseries = climate_alltimeseries;
 %g1_alltimeseries = init_alltimeseries;
-g2_alltimeseries = meltsens_alltimeseries;
+%g2_alltimeseries = meltsens_alltimeseries;
 %g3_alltimeseries = calving_alltimeseries; 
 g3_alltimeseries = ice_alltimeseries; 
 %g3_alltimeseries = resolution_alltimeseries; 
 %g3_alltimeseries = glresolution_alltimeseries; 
 %g3_alltimeseries = subglmelt_alltimeseries; 
-%g2_alltimeseries = meltparameterisation_alltimeseries; 
+g2_alltimeseries = meltparameterisation_alltimeseries; 
 %g3_alltimeseries = init_alltimeseries;
 %g3_alltimeseries = gia_alltimeseries; 
 %g3_alltimeseries = stressbalance_alltimeseries;
@@ -298,7 +298,7 @@ g3_alltimeseries = ice_alltimeseries;
 %titlestring = 'var: , g1: climate, g2: melt sens, g3: gia'
 %titlestring = 'var: , g1: climate, g2: melt sens, g3: stress balance'
 %titlestring = 'var: cum BMR, g1: climate, g2: melt param, g3: calving'
-%titlestring = 'var: cum BMR, g1: climate, g2: melt param, g3: ice model'
+titlestring = 'var: cum BMR, g1: climate, g2: melt param, g3: ice model'
 
 
 
@@ -413,7 +413,10 @@ end
 
 %print(gcf, '-dpdf', '-painters', 'Figures/ANOVA3_SLE_ClimateMeltSensCalving.pdf');
 %print(gcf, '-dpdf', '-painters', 'Figures/ANOVA3_cumBMR_'+sector+'_ClimateMeltSensCalving.pdf');
-print(gcf, '-dpdf', '-painters', 'Figures/ANOVA3_cumBMR_'+sector+'_ClimateMeltParameterisationCalving.pdf');
+%print(gcf, '-dpdf', '-painters', 'Figures/ANOVA3_cumBMR_'+sector+'_ClimateMeltParameterisationCalving.pdf');
+
+print(gcf, '-dpdf', '-painters', 'Figures/ANOVA3_cumBMR_'+sector+'_ClimateMeltParameterisationIcemodel.pdf');
+
 
 %print(gcf, '-dpdf', '-painters', 'Figures/ANOVA3_SLE_ClimateMeltSensGLResolution.pdf');
 %print(gcf, '-dpdf', '-painters', 'Figures/ANOVA3_SLE_ClimateMeltSensSubglmelt.pdf');
