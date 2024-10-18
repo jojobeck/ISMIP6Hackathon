@@ -4,14 +4,14 @@
 %% Define data to be explained
 % This script is based on Helene Seroussi's anova test for the AIS 2300 ISMIP6 paper currently in review
 
-% FIXME note this is updated to use _jb!
-varn = 'dslc_anom';  %varn = 'sle';
+varn = 'thermalforcing';  %varn = 'sle';
 
 %% Path to data, use mounted drive here 
 
 % local
 %computed_name = '/home/ronja/projects/MeltSensitivity/10528582/ComputedScalars/ComputedScalars'
 % mounted nci
+%computed_name = '/mnt/ronja/nci/ismip6_hackathon/ComputedScalars'
 computed_name = '/home/ronja/projects/MeltSensitivity/ComputedScalars'
 
 
@@ -37,7 +37,7 @@ metadata = readtable("../../data_preprocessing/Metadata_IceFront_InitMethod_GIA_
 
 %% Load data 
 
-sector = "AIS" ;% "FRIS", %"RIS", "ASE", "Aurora", "Wilkes"
+sector = "ASE";%"AIS" ;% "FRIS", %"RIS", "ASE", "Aurora", "Wilkes"
 
 data_alltimeseries = NaN*ones(4*8,285);
 
@@ -51,7 +51,7 @@ for iexp=1:length(metadata.Model)
     elseif (strcmp(convertCharsToStrings(metadata.Group{iexp}),"IMAU") | strcmp(convertCharsToStrings(metadata.Group{iexp}),"DOE") )
         continue   % FIXME continue to exclude these?
     else
-        filename = append(computed_name,'/',metadata.Experiment{iexp},'/',varn,'_jb','/', ...
+        filename = append(computed_name,'/',metadata.Experiment{iexp},'/',varn,'/', ...
             'computed_', varn, '_AIS_', metadata.fileID{iexp},'_',metadata.Experiment{iexp},'.nc');
         
         if strcmp(sector, "ASE")
@@ -91,9 +91,11 @@ save("data/data_alltimeseries_"+sector+".mat", 'data_alltimeseries');
 %save("data/time_"+sector+".mat")
 
 %% Load data if you want to skip the part before
-sector = "ASE" ;% "FRIS", %"RIS", "ASE", "Aurora", "Wilkes"
+sector = "FRIS" ;% "FRIS", %"RIS", "ASE", "Aurora", "Wilkes"
 
 data_alltimeseries = load("data/data_alltimeseries_"+sector+".mat", 'data_alltimeseries').data_alltimeseries;
+
+%
 
 % these are string that sort the data into classes, e.g., subgrid melt
 % "yes" or "no", these groups will be tested in the ANOVA test
@@ -109,18 +111,15 @@ resolution_alltimeseries = {};
 init_alltimeseries = {};
 gia_alltimeseries = {};
 stressbalance_alltimeseries = {};
-dynamiclossfac_alltimeseries = {};
-
 
 % Calving groups:
 calvinggroup1 = {'VUW_PISM1', 'VUW_PISM1_s1', 'VUW_PISM1_s2', 'VUW_PISM1_s3', 'VUW_PISM1_s4' ,'VUW_PISM2' ,'VUW_PISM2_s1' ,'VUW_PISM2_s2', 'VUW_PISM2_s3', 'VUW_PISM2_s4', 'PIK_PISM', 'LSCE_GRISLI2' ,'LSCE_GRISLI','UCM_Yelmo'}
 calvinggroup2 = {'DC_ISSM', 'ILTS_SICOPOLIS' ,'VUB_AISMPALEO','NCAR_CISM1' ,'NORCE_CISM3-MAR364-ERA-t1-nonlocal', 'NORCE_CISM4-MAR364-ERA-t1-nonlocal' ,'NORCE_CISM5-MAR364-ERA-t1-nonlocal','NCAR_CISM2', 'NORCE_CISM3-MAR364-ERA-t1-local' ,'NORCE_CISM4-MAR364-ERA-t1-local' ,'NORCE_CISM5-MAR364-ERA-t1-local', 'UNN_Ua','NORCE_CISM2-MAR364-ERA-t1', 'NORCE_CISM3-MAR364-ERA-t1', 'NORCE_CISM4-MAR364-ERA-t1', 'NORCE_CISM4-MAR364-JRA-t1','NORCE_CISM5-MAR364-ERA-t1', 'ULB_fETISh-KoriBU2', 'IGE_ElmerIce' }
-calvinggroup3 = {'ULB_fETISh-KoriBU1', 'UCSD_ISSM', 'UTAS_ElmerIce'}
-%calvinggroup3 = {'ULB_fETISh-KoriBU1', 'UCSD_ISSM', 'DOE_MALI_4km', 'IMAU_UFEMISM}
+calvinggroup3 = {'ULB_fETISh-KoriBU1', 'UCSD_ISSM', 'UTAS_ElmerIce', 'DOE_MALI_4km', 'IMAU_UFEMISM'}
+%calvinggroup3 = {'ULB_fETISh-KoriBU1', 'UCSD_ISSM', '}
 
 % Determine Melt Sensitivity groups
 ms = readtable("tables/best_ms_method_per_model.csv");
-dfac = readtable("../../GroupBMBtodSLR/data_analysis/tables/best_dils_per_model.csv")
 
 yearlen = 360*24*60*60; %FIXME 360 day year OK?
 expnum=0;
@@ -154,18 +153,19 @@ for iexp=1:length(metadata.Model)
                 
         % Add melt sensitivity group based on melt sens       
         i = (strcmp(ms.Model, metadata.fileID{iexp}) ) ; 
+        
         if strcmp(sector, "ASE")
             sens = ms.melt_sensetivity_Amundsen(i); 
             small_sens = mean(ms.melt_sensetivity_Amundsen) - std(ms.melt_sensetivity_Amundsen)/2; % smaller than mean - half a standard deviation
             large_sens = mean(ms.melt_sensetivity_Amundsen) + std(ms.melt_sensetivity_Amundsen)/2;
         elseif strcmp(sector,"Aurora") % FIXME WHOLE EAIS
-            sens = ms.melt_sensetivity_Aurora(i);
-            small_sens = mean(ms.melt_sensetivity_Aurora) - std(ms.melt_sensetivity_Aurora)/2; % smaller than mean - half a standard deviation
-            large_sens = mean(ms.melt_sensetivity_Aurora) + std(ms.melt_sensetivity_Aurora)/2;
+            sens = ms.melt_sensetivity_EastAntarctica(i);
+            small_sens = mean(ms.melt_sensetivity_EastAntarctica) - std(ms.melt_sensetivity_EastAntarctica)/2; % smaller than mean - half a standard deviation
+            large_sens = mean(ms.melt_sensetivity_EastAntarctica) + std(ms.melt_sensetivity_EastAntarctica)/2;
         elseif strcmp(sector, "Wilkes") % FIXME WHOLE EAIS
-            sens = ms.melt_sensetivity_Wilkes(i);
-            small_sens = mean(ms.melt_sensetivity_Wilkes) - std(ms.melt_sensetivity_Wilkes)/2; % smaller than mean - half a standard deviation
-            large_sens = mean(ms.melt_sensetivity_Wilkes) + std(ms.melt_sensetivity_Wilkes)/2;
+            sens = ms.melt_sensetivity_EastAntarctica(i);
+            small_sens = mean(ms.melt_sensetivity_EastAntarctica) - std(ms.melt_sensetivity_EastAntarctica)/2; % smaller than mean - half a standard deviation
+            large_sens = mean(ms.melt_sensetivity_EastAntarctica) + std(ms.melt_sensetivity_EastAntarctica)/2;
         elseif strcmp(sector, "FRIS" )
             sens = ms.melt_sensetivity_FilchnerRonne(i);
             small_sens = mean(ms.melt_sensetivity_FilchnerRonne) - std(ms.melt_sensetivity_FilchnerRonne)/2; % smaller than mean - half a standard deviation
@@ -189,47 +189,7 @@ for iexp=1:length(metadata.Model)
              sens_group='high melt sensitivity';
         end
         meltsens_alltimeseries{end+1}=sens_group;
-            
-
-        % Add dynamics ice loss sensitivity group based on ice loss factors       
-        i = (strcmp(dfac.Model, metadata.fileID{iexp}) ) ; 
-        if strcmp(sector, "ASE")
-            sens = dfac.dils_Amundsen(i); 
-            small_sens = mean(dfac.dils_Amundsen) - std(dfac.dils_Amundsen)/2; % smaller than mean - half a standard deviation
-            large_sens = mean(dfac.dils_Amundsen) + std(dfac.dils_Amundsen)/2;
-        elseif strcmp(sector,"Aurora") % FIXME WHOLE EAIS
-            sens = dfac.dils_Aurora(i); 
-            small_sens = mean(dfac.dils_Aurora) - std(dfac.dils_Aurora)/2; % smaller than mean - half a standard deviation
-            large_sens = mean(dfac.dils_Aurora) + std(dfac.dils_Aurora)/2;
-        elseif strcmp(sector, "Wilkes") % FIXME WHOLE EAIS
-            sens = dfac.dils_Wilkes(i); 
-            small_sens = mean(dfac.dils_Wilkes) - std(dfac.dils_Wilkes)/2; % smaller than mean - half a standard deviation
-            large_sens = mean(dfac.dils_Wilkes) + std(dfac.dils_Wilkes)/2;
-        elseif strcmp(sector, "FRIS" )
-            sens = dfac.dils_FilchnerRonne(i); 
-            small_sens = mean(dfac.dils_FilchnerRonne) - std(dfac.dils_FilchnerRonne)/2; % smaller than mean - half a standard deviation
-            large_sens = mean(dfac.dils_FilchnerRonne) + std(dfac.dils_FilchnerRonne)/2;
-        elseif strcmp(sector, "RIS")
-            sens = dfac.dils_Ross(i); 
-            small_sens = mean(dfac.dils_Ross) - std(dfac.dils_Ross)/2; % smaller than mean - half a standard deviation
-            large_sens = mean(dfac.dils_Ross) + std(dfac.dils_Ross)/2;
-        else
-            fprintf("No sector selected (correctly), loading whole AIS ")
-            sens = dfac.dils_AIS(i); 
-            small_sens = mean(dfac.dils_AIS) - std(dfac.dils_AIS)/2; % smaller than mean - half a standard deviation
-            large_sens = mean(dfac.dils_AIS) + std(dfac.dils_AIS)/2;
-        end
-
-        if sens <= small_sens
-             sens_group='low dils';
-        elseif sens <= large_sens
-            sens_group='medium dils';
-        else 
-             sens_group='high dils';
-        end
-        dynamiclossfac_alltimeseries{end+1}=sens_group;
-
-
+                
         % Define calving groups based on calving criertia
         i1 = ( strcmp(convertCharsToStrings(metadata.fileID{iexp}), calvinggroup1)) ;
         i2 = ( strcmp(convertCharsToStrings(metadata.fileID{iexp}), calvinggroup2)) ;
@@ -237,10 +197,11 @@ for iexp=1:length(metadata.Model)
         if sum(i1)>0
             calving_alltimeseries{end+1}='Strong calving';
         elseif sum(i2)>0
-            calving_alltimeseries{end+1}='Weak calving';
+            %calving_alltimeseries{end+1}='Weak calving';
+            calving_alltimeseries{end+1}='No calving';
         elseif sum(i3)>0
-            %calving_alltimeseries{end+1}='No calving';
-            calving_alltimeseries{end+1}='Weak calving';
+            calving_alltimeseries{end+1}='No calving';
+            %calving_alltimeseries{end+1}='Weak calving';
         else
             error('no calving group assigned');
         end;
@@ -301,20 +262,117 @@ end
 % Print number of members in a bin?
 
 
+
+%% Try 2 way anova
+
+g1_data = climate_alltimeseries;
+%g2_data = calving_alltimeseries;
+g2_data = meltparameterisation_alltimeseries;
+%g2_data = ice_alltimeseries;
+
+%g2_data = meltsens_alltimeseries;
+
+%g2_data = ice_alltimeseries;
+
+titlestring='var: thermal forcing, g1: climate, g2: ice';
+%titlestring='var: sle, g1: climate, g2: melt sens';
+
+
+var_ensemble=var(data_alltimeseries,1);
+
+var_ensemble_anova=zeros(285,1);
+var_g1=zeros(285,1);
+var_g2=zeros(285,1);
+%var_g1g2=zeros(285,1);
+var_error=zeros(285,1);
+
+for yeari=2:285
+    individual_results=data_alltimeseries(:,yeari);
+    [p,tabl]= anovan(individual_results, {g1_data,g2_data},'display','off');
+    var_g1(yeari)=tabl{2,2}/length(g1_data);
+    var_g2(yeari)=tabl{3,2}/length(g1_data);
+    %var_g1g2(yeari)=tabl{4,2}/length(g1_data);
+    var_error(yeari)=tabl{end-1,2}/length(g1_data);
+    var_ensemble_anova(yeari)=tabl{end,2}/length(g1_data);
+end
+
+
+
+% PLOT 2 way anova
+
+figure(1); clf; set(gcf,'color','w'); hold on;
+set(gcf,'position',[100 200 1200 920]);
+
+
+subplot(2,1,1)
+years=(1:285)+2015;
+plot(years(2:end), sqrt(var_g1(2:end)),'color', [238 102 119]/256,'linewidth',2)
+hold on
+plot(years(2:end), sqrt(var_g2(2:end)),'color', [102 204 238]/256,'linewidth',2)
+%plot(years(2:end), sqrt(var_g3(2:end)),'color', [204 187 68]/256,'linewidth',2)
+%plot(years(2:end), sqrt(var_g1g2(2:end)),'color', [170 51 119]/256,'linewidth',2)
+%plot(years(2:end), sqrt(var_g1g3(2:end)),'color', [34 136 51]/256,'linewidth',2)
+%plot(years(2:end), sqrt(var_g2g3(2:end)),'color', [68 19 170]/256,'linewidth',2)
+plot(years(2:end), sqrt(var_error(2:end)),'color', [187 187 187]/256,'linewidth',2)
+plot(years(2:end), sqrt(var_ensemble_anova(2:end)),'color', [0 0 0]/256,'linewidth',2)
+hold off
+grid on
+ax = gca;
+ax.Layer = 'top';
+xlim([2017 2300])
+%ylim([0 1.8])
+legend('g1','g2','2-way interaction','total','location','West','fontsize',13)
+xlabel('Year','fontsize',13)
+ylabel('\sigma (K)','fontsize',13)
+text(2005,0,'a','VerticalAlignment','middle','HorizontalAlignment','right','fontsize',16,'fontweight','b');
+set(gca,'fontsize',13)
+%
+subplot(2,1,2)
+years=(1:285)+2015;
+a=area(years(2:end),([var_g1(2:end),var_g2(2:end),var_error(2:end)]./var_ensemble_anova(2:end)*100));
+a(1).FaceColor=[238 102 119]/256;
+a(2).FaceColor=[102 204 238]/256;
+a(3).FaceColor=[187 187 187]/256;
+legend('g1','g2','2-way interaction','location','West','fontsize',13)
+grid on
+ax = gca;
+ax.Layer = 'top';
+xlim([2017 2300])
+ylim([1 100])
+xlabel('Year','fontsize',13)
+ylabel('Percentage of variance','fontsize',13)
+text(2005,0,'b','VerticalAlignment','middle','HorizontalAlignment','right','fontsize',16,'fontweight','b');
+set(gca,'fontsize',13)
+
+h = gcf;
+set(h,'Units','Inches');
+pos = get(h,'Position');
+set(h,'PaperPositionMode','Auto','PaperUnits','Inches','PaperSize',[pos(3), pos(4)]);
+pos = get(h,'Position');
+
+title(titlestring)
+
+%%
+%print(gcf, '-dpdf', '-painters', 'Figures/ANOVA2_SLE_ClimateCalving.pdf');
+
+print(gcf, '-dpdf', '-painters', 'Figures/ANOVA2_TF_ClimateIcemodel.pdf');
+
+
+
+
+
 %% 3-way ANOVA
 
 % select groups for 3-way anova
 g1_alltimeseries = climate_alltimeseries;
 %g1_alltimeseries = init_alltimeseries;
-g2_alltimeseries = meltsens_alltimeseries;
-g3_alltimeseries = dynamiclossfac_alltimeseries;
-
-%g3_alltimeseries = calving_alltimeseries; 
-%g3_alltimeseries = ice_alltimeseries; 
-%g3_alltimeseries = resolution_alltimeseries; 
+%g2_alltimeseries = meltsens_alltimeseries;
+%g2_alltimeseries = calving_alltimeseries; 
+%g2_alltimeseries = ice_alltimeseries; 
+g2_alltimeseries = resolution_alltimeseries; 
 %g3_alltimeseries = glresolution_alltimeseries; 
 %g3_alltimeseries = subglmelt_alltimeseries; 
-%g3_alltimeseries = meltparameterisation_alltimeseries; 
+g3_alltimeseries = meltparameterisation_alltimeseries; 
 %g3_alltimeseries = init_alltimeseries;
 %g3_alltimeseries = gia_alltimeseries; 
 %g3_alltimeseries = stressbalance_alltimeseries;
@@ -322,19 +380,8 @@ g3_alltimeseries = dynamiclossfac_alltimeseries;
 
 %meltparameters_alltimeseries = {};
 
-titlestring = 'var: dslc, g1: climate, g2: melt sens, g3: model sens'
-
-%titlestring = 'var: dslc, g1: init method, g2: melt sens, g3: stress balance'
-%titlestring = 'var: dslc, g1: init method, g2: melt sens, g3: resolution'
-%titlestring = 'var: dslc, g1: climate, g2: melt sens, g3: calving'
-%titlestring = 'var: dslc, g1: climate, g2: melt sens, g3: ice model'
-%titlestring = 'var: dslc, g1: climate, g2: melt sens, g3: resolution'
-%titlestring = 'var: sle, g1: climate, g2: melt sens, g3: gl resolution'
-%titlestring = 'var: dslc, g1: climate, g2: melt sens, g3: subglmelt'
-%titlestring = 'var: sle, g1: climate, g2: melt sens, g3: melt parameterisation'
-%titlestring = 'var: dslc, g1: climate, g2: melt sens, g3: init method'
-%titlestring = 'var: dslc, g1: climate, g2: melt sens, g3: gia'
-%titlestring = 'var: dslc, g1: climate, g2: melt sens, g3: stress balance'
+%titlestring = 'var: thermalforcing, g1: climate, g2: melt sens, g3: ice model'
+titlestring = 'var: thermalforcing, g1: climate, g2: calving, g3: melt param'
 
 
 
@@ -386,7 +433,7 @@ xlim([2017 2300])
 %ylim([0 1.8])
 legend('g1','g2','g3','g1-g2','g1-g3','g2-g3','3-way interaction','total','location','West','fontsize',13)
 xlabel('Year','fontsize',13)
-ylabel('\sigma (m SLE)','fontsize',13)
+ylabel('\sigma (K)','fontsize',13)
 text(2005,0,'a','VerticalAlignment','middle','HorizontalAlignment','right','fontsize',16,'fontweight','b');
 set(gca,'fontsize',13)
 
@@ -426,12 +473,8 @@ title(titlestring)
 
 %%
 
-print(gcf, '-dpdf', '-painters', 'Figures/ANOVA3_DSLC_'+sector+'_ClimateMeltSensIceModelSens.pdf');
-
-
-
 %print(gcf, '-dpdf', '-painters', 'Figures/ANOVA3_SLE_ClimateMeltSensCalving.pdf');
-%print(gcf, '-dpdf', '-painters', 'Figures/ANOVA3_DSLC_'+sector+'_ClimateMeltSensIceModel.pdf');
+print(gcf, '-dpdf', '-painters', 'Figures/ANOVA3_TF_'+sector+'_ClimateMeltSensIceModel.pdf');
 %print(gcf, '-dpdf', '-painters', 'Figures/ANOVA3_SLE_ClimateMeltSensGLResolution.pdf');
 %print(gcf, '-dpdf', '-painters', 'Figures/ANOVA3_SLE_ClimateMeltSensSubglmelt.pdf');
 %print(gcf, '-dpdf', '-painters', 'Figures/ANOVA3_SLE_ClimateMeltSensMeltParameterisation.pdf');
@@ -447,14 +490,14 @@ print(gcf, '-dpdf', '-painters', 'Figures/ANOVA3_DSLC_'+sector+'_ClimateMeltSens
 
 %% test 1 way anova
 
-g1_data = meltsens_alltimeseries;
+%g1_data = meltsens_alltimeseries;
 %g1_data = calving_alltimeseries;
-%g1_data = climate_alltimeseries;
+g1_data = climate_alltimeseries;
 %g1_data = ice_alltimeseries;
 
-titlestring = 'var: sle, g1: melt sensitivity'
+%titlestring = 'var: sle, g1: melt sensitivity'
 %titlestring = 'var: sle, g1: calving group'
-%titlestring = 'var: sle, g1: climate model'
+titlestring = 'var: sle, g1: climate model'
 %titlestring = 'var: sle, g1: ice model'
 
 
@@ -531,10 +574,13 @@ title(titlestring)
 
 g1_data = climate_alltimeseries;
 %g2_data = calving_alltimeseries;
-g2_data = meltsens_alltimeseries;
+g2_data = meltparameterisation_alltimeseries;
+%g2_data = meltsens_alltimeseries;
 
-%titlestring='var: sle, g1: climate, g2: calving';
-titlestring='var: sle, g1: climate, g2: melt sens';
+%g2_data = ice_alltimeseries;
+
+titlestring='var: thermal forcing, g1: climate, g2: melt parameterisation';
+%titlestring='var: sle, g1: climate, g2: melt sens';
 
 
 var_ensemble=var(data_alltimeseries,1);
@@ -582,7 +628,7 @@ xlim([2017 2300])
 %ylim([0 1.8])
 legend('g1','g2','2-way interaction','total','location','West','fontsize',13)
 xlabel('Year','fontsize',13)
-ylabel('\sigma (m SLE)','fontsize',13)
+ylabel('\sigma (K)','fontsize',13)
 text(2005,0,'a','VerticalAlignment','middle','HorizontalAlignment','right','fontsize',16,'fontweight','b');
 set(gca,'fontsize',13)
 %
@@ -614,7 +660,7 @@ title(titlestring)
 %%
 %print(gcf, '-dpdf', '-painters', 'Figures/ANOVA2_SLE_ClimateCalving.pdf');
 
-print(gcf, '-dpdf', '-painters', 'Figures/ANOVA2_SLE_ClimateMeltSens.pdf');
+print(gcf, '-dpdf', '-painters', 'Figures/ANOVA2_TF_ClimateMeltparam.pdf');
 
 
 
