@@ -32,8 +32,8 @@ removeFileID = []
 loop_info = fn.create_loop_info(mnt_pth, expnames, removeFileID, metadata_file)
 # comment line below if script is run for all models
 loop_info= loop_info[loop_info['Model'].isin(['IMAU_UFEMISM1','IMAU_UFEMISM2','IMAU_UFEMISM3', 'IMAU_UFEMISM4'])].reset_index(drop = True)
-variable_name = 'iareafl' #please don't change
-variable = 'iareafl'
+variable_name = 'shelfmelt' #please don't change
+variable = 'shelfmelt'
 
 
 for fi in range(len(loop_info.index)):
@@ -44,6 +44,7 @@ for fi in range(len(loop_info.index)):
     model = loop_info['Model'][fi]
     maskfile = loop_info['mask_file'][fi]
     maskfile_ice= maskfile.replace('sftflf','sftgif')
+    melt = xr.open_dataset(pth+'/'+maskfile.replace('sftflf','libmassbffl'))
     maskfile = maskfile.replace('sftflf_AIS_','new_sftflf_AIS_')
     scalefac_pth= f'/home/565/jb1863/ismip6_2300/masks/af2_el_ismip6_ant_{grid}km.nc'
     #loadscaling mask
@@ -108,7 +109,7 @@ for fi in range(len(loop_info.index)):
             else:
                 smask = d_region.sectors.values>0
 
-            shelf_total_new=np.sum(mask['sftflf'].values *mask_ice['sftgif'].values*scalefac_model.af2.values*smask,axis=(1,2))*((grid)*1000.0)**2 #in kg/s
+            shelf_total_new=np.sum(melt['libmassbffl'].values* mask['sftflf'].values *mask_ice['sftgif'].values*scalefac_model.af2.values*smask,axis=(1,2))*((grid)*1000.0)**2 #in kg/s
 
 # for ti in time:
 # like Helene
