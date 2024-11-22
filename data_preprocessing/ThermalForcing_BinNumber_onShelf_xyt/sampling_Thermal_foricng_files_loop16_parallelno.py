@@ -16,8 +16,9 @@ expnames_plot = ['CCSM4','HadGEM2','CESM2','UKESM','ctrl']
 expnames_path = ['/1995-2300/CCSM4_RCP85','/1995-2299/HadGEM2-ES_RCP85','/1995-2299/CESM2-WACCM_SSP585','/1995-2300/UKESM1-0-LL_SSP585','climatology_from_obs_1995-2017/']
 
 
-removeFileID = ['IMAU_UFEMISM1', 'IMAU_UFEMISM2', 'IMAU_UFEMISM3', 'IMAU_UFEMISM4',
-               'DOE_MALI_4km', 'DOE_MALI_8km_Ant95', 'DOE_MALI_8km_AntMean'] # specify models to remove
+removeFileID = []
+# 'iIMAU_UFEMISM1', 'IMAU_UFEMISM2', 'IMAU_UFEMISM3', 'IMAU_UFEMISM4',
+# 'DOE_MALI_4km', 'DOE_MALI_8km_Ant95', 'DOE_MALI_8km_AntMean'] # specify models to remove
 
 metadata_file = 'Metadata.txt'
 # Generate loop_info DataFrame
@@ -25,6 +26,10 @@ loop_info = fn.create_loop_info(mnt_pth, expnames, removeFileID, metadata_file)
 # do 8km for now
 loop_info=loop_info[loop_info.Grid ==res].reset_index(drop=True)
 
+# CHecking certain models, comment if all models with resolution res should run
+# loop_info= loop_info[loop_info['Model'].isin(['IMAU_UFEMISM3', 'IMAU_UFEMISM4', 'UCM_Yelmo'])].reset_index(drop = True)
+
+# expnames =['ctrlAE']
 
 start_time = time.time()
 for i_e,expo in enumerate(expnames):

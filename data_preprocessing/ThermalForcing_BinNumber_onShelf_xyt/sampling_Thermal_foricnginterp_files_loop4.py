@@ -1,0 +1,117 @@
+import numpy as np
+import xarray as xr
+import pandas as pd
+import os
+import time
+import function_sampling_Thermal_forcing_files as fn
+
+res =4 #choose from 4,8,16 and 32
+start_time = time.time()
+#{{{ path experiment etc 
+forcing_data_path = '/home/565/jb1863/ismip6_2300/'
+# Example experiment and corresponding ocean forcing names this can be drawn from the INFOS Dataframe
+
+expnames = ['expAE02', 'expAE03', 'expAE04', 'expAE05', 'ctrlAE']
+expnames_plot = ['CCSM4','HadGEM2','CESM2','UKESM','ctrl']
+expnames_path = ['/1995-2300/CCSM4_RCP85','/1995-2299/HadGEM2-ES_RCP85','/1995-2299/CESM2-WACCM_SSP585','/1995-2300/UKESM1-0-LL_SSP585','climatology_from_obs_1995-2017/']
+
+
+mnt_pth = '/home/565/jb1863/' #mount path,actual path if script is run on cluster
+pth_calc_output = mnt_pth + 'ismip6_hackathon/' #write folder
+dirPath =mnt_pth + 'ismip6_2300' #read folder
+# }}}
+#{{{ table 
+# create table to bu used the loop of neccesary model output to be used stroe in results
+metadata = pd.read_csv('Metadata.txt')
+
+expFilter = expnames # specify an experiment
+# gridFilter = ['04', '4', '8', '_08']
+removeFileID = []
+
+models = metadata.loc[( metadata['Experiment'].isin(expFilter)) &
+        ~(metadata['fileID'].isin(removeFileID)),]
+
+
+results_data = []
+for i in range(models.shape[0]):
+
+    modelPath = models.iloc[i].fileID
+    exp = models.iloc[i].Experiment
+    modelFiles = os.listdir(dirPath + '/' + modelPath)
+    expDirPos = [i for i, dirName in enumerate(modelFiles) if dirName.startswith(exp)]
+
+
+
+    # For each relevant directory, loop
+    for expdir_subgrid in expDirPos:
+        expDir = modelFiles[expdir_subgrid]
+        expFiles = os.listdir(dirPath + '/' + modelPath + '/' + expDir)
+
+        # Get grid size from expDir: format expAE01_04 where 04 is the grid size and convert to int
+        grid = int(expDir.split('_')[1])
+
+        # Find position of relevant files
+        draftPos = [i for i, fileName in enumerate(expFiles) if fileName.startswith('base')]
+        meltPos = [i for i, fileName in enumerate(expFiles) if fileName.startswith('libmassbffl')]
+        maskPos = [i for i, fileName in enumerate(expFiles) if fileName.startswith('sftflf')]
+
+        # Construct dictionary and append to list
+        results_data.append({'base_file': expFiles[draftPos[0]],
+                             'mask_file': expFiles[maskPos[0]],
+                             'path': os.path.join(dirPath, modelPath, expDir),
+                             'Experiment': exp,
+                             'Model': modelPath,
+                             'Grid': grid})
+
+
+pre_results = pd.DataFrame(results_data)
+#HAack only use 8km file ,todo subsample for 4 and 16
+loop_info = pre_results[pre_results['Grid'] == res].reset_index(drop=True)
+loop_info =loop_info.reset_index(drop = True)
+# }}}
+for i_e,experiment in enumerate(expnames):
+    experiment =expnames[i_e]
+    name = expnames_path[i_e]
+    print(name)
+    #create table only for one experiment type alias forcing file
+    results =loop_info[loop_info['Experiment'] == experiment].reset_index(drop=True)
+    if experiment!='ctrlAE':
+        tf = xr.open_dataset(
+            forcing_data_path+name+"_thermal_forcing_"+str(int(res))+"km_x_60m.nc")
+
+
+
+        zbnd = tf.get('z_bnds').values[0,:]
+    else:
+        tf = xr.open_dataset(
+            forcing_data_path+name +"obs_thermal_forcing_1995-2017_"+str(int(res))+"km_x_60m.nc")
+        zbnd = tf.get('z_bnds').values
+
+
+    for i in range(results.shape[0]):
+        print('in loop,',i); 
+        print(results.iloc[i].mask_file)
+        maskData = xr.open_dataset(results.iloc[i].path + '/' + results.iloc[i].mask_file)
+
+        draftData = xr.open_dataset(results.iloc[i].path + '/' + results.iloc[i].base_file)
+
+        d_calc = fn.create_empty_dummy_interp_nc(maskData)
+        time_model = fn.get_time_model(maskData)
+
+        #get path save and names for the new nc data
+        path_save, file_end=fn.get_outpath_tf_filend(results,i)
+        #process data
+        if experiment!='ctrlAE':
+            d_calcnew = fn.process_data_withInterp(maskData, draftData, zbnd, tf, time_model,d_calc)
+        else:
+            d_calcnew = fn.process_data_withInterp_ctrlrun(maskData, draftData, zbnd, tf, time_model,d_calc)
+        print('save data to', path_save);
+        d_calcnew.to_netcdf(path_save +'/shelf_thermalforcingInterp'+file_end)
+end_time = time.time()
+
+# Calculate elapsed time
+elapsed_time = end_time - start_time
+
+print("Elapsed time:", elapsed_time, "seconds")
+
+

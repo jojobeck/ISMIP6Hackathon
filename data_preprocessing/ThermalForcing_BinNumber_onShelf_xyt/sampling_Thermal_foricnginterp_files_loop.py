@@ -5,7 +5,7 @@ import os
 import time
 import function_sampling_Thermal_forcing_files as fn
 
-res =8 #choose from 4,8,16 and 32
+res =16 #choose from 4,8,16 and 32
 start_time = time.time()
 #{{{ path experiment etc 
 forcing_data_path = '/home/565/jb1863/ismip6_2300/'
@@ -24,15 +24,9 @@ dirPath =mnt_pth + 'ismip6_2300' #read folder
 # create table to bu used the loop of neccesary model output to be used stroe in results
 metadata = pd.read_csv('Metadata.txt')
 
-
-
-
-
-
 expFilter = expnames # specify an experiment
 # gridFilter = ['04', '4', '8', '_08']
-removeFileID = ['IMAU_UFEMISM1', 'IMAU_UFEMISM2', 'IMAU_UFEMISM3', 'IMAU_UFEMISM4',
-               'DOE_MALI_4km', 'DOE_MALI_8km_Ant95', 'DOE_MALI_8km_AntMean'] # specify models to remove
+removeFileID = []
 
 models = metadata.loc[( metadata['Experiment'].isin(expFilter)) &
         ~(metadata['fileID'].isin(removeFileID)),]
@@ -73,6 +67,7 @@ for i in range(models.shape[0]):
 pre_results = pd.DataFrame(results_data)
 #HAack only use 8km file ,todo subsample for 4 and 16
 loop_info = pre_results[pre_results['Grid'] == res].reset_index(drop=True)
+loop_info =loop_info.reset_index(drop = True)
 # }}}
 for i_e,experiment in enumerate(expnames):
     experiment =expnames[i_e]
