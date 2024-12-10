@@ -49,7 +49,7 @@ yearlen = 360*24*60*60; %FIXME 360 day year OK?
 
 %% Load data 
 
-sector = "Wilkes" ;% "FRIS", %"RIS", "ASE", "Aurora", "Wilkes"
+sector = "AIS" ;% "FRIS", %"RIS", "ASE", "Aurora", "Wilkes"
 
 data_alltimeseries = NaN*ones(4*8,285);
 
@@ -58,10 +58,8 @@ for iexp=1:length(metadata.Model)
     % skip if not correct experiment
     if strcmp(convertCharsToStrings(metadata.Experiment{iexp}),"ctrlAE")
         continue
-    %elseif strcmp(convertCharsToStrings(metadata.MainSubmission{iexp}),"False")
-    %    continue    % FIXME continue to exclude these?
-    %elseif (strcmp(convertCharsToStrings(metadata.Group{iexp}),"IMAU") | strcmp(convertCharsToStrings(metadata.Group{iexp}),"DOE") )
-    %    continue   % FIXME continue to exclude these?
+    elseif strcmp(convertCharsToStrings(metadata.MainSubmission{iexp}),"False")
+        continue    % FIXME continue to exclude these?
     elseif (strcmp(convertCharsToStrings(metadata.Group{iexp}),"IMAU"))
         filename = append(computed_name,'/',metadata.Experiment{iexp},'/',varn,'/', ...
             'jb_computed_', varn, '_AIS_', metadata.fileID{iexp},'_',metadata.Experiment{iexp},'.nc');
@@ -102,26 +100,19 @@ for iexp=1:length(metadata.Model)
             data2=ncread(filename2,append(varn2)) ;
        end;
         
-        %time=2016:2016+length(data)-1;
-
         expnum = expnum+1;
 
-		% FOR dynamic SLE
-        %data_alltimeseries(expnum,:)= data(1:285)*1e12/1028/3.6e14;  % Gt convert to m SLE%-(data(1:285)-data(1))/(362.5*1000); %FIXME replace anomaly with ctrl?
-		% FOR BMB
-        %data_alltimeseries(expnum,:)=-(data(1:285)-data(1))/1e12*yearlen;
-        %data_alltimeseries(expnum,:)=cumsum(-(data(1:285)-data(1))/1e12*yearlen); %FIXME replace anomaly with ctrl?
-        % FOR average BMB
+		% FOR average BMB
         data_alltimeseries(expnum,:)=-(data(1:285)./data2(1:285)-data(1)/data2(1))*yearlen/910.0; %m /a
 
 end
 
 % Save data 
 save("data/data_alltimeseries_"+sector+"_avgBMR.mat", 'data_alltimeseries');
-%save("data/time_"+sector+".mat")
+
 
 %% Load data if you want to skip the part before
-sector = "FRIS" ;% "FRIS", %"RIS", "ASE", "Aurora", "Wilkes"
+sector = "AIS" ;% "FRIS", %"RIS", "ASE", "Aurora", "Wilkes"
 
 data_alltimeseries = load("data/data_alltimeseries_"+sector+"_avgBMR.mat", 'data_alltimeseries').data_alltimeseries;
 
@@ -143,10 +134,9 @@ gia_alltimeseries = {};
 stressbalance_alltimeseries = {};
 
 % Calving groups:
-calvinggroup1 = {'VUW_PISM1', 'VUW_PISM1_s1', 'VUW_PISM1_s2', 'VUW_PISM1_s3', 'VUW_PISM1_s4' ,'VUW_PISM2' ,'VUW_PISM2_s1' ,'VUW_PISM2_s2', 'VUW_PISM2_s3', 'VUW_PISM2_s4', 'PIK_PISM', 'LSCE_GRISLI2' ,'LSCE_GRISLI','UCM_Yelmo'}
-calvinggroup2 = {'DC_ISSM', 'ILTS_SICOPOLIS' ,'VUB_AISMPALEO','NCAR_CISM1' ,'NORCE_CISM3-MAR364-ERA-t1-nonlocal', 'NORCE_CISM4-MAR364-ERA-t1-nonlocal' ,'NORCE_CISM5-MAR364-ERA-t1-nonlocal','NCAR_CISM2', 'NORCE_CISM3-MAR364-ERA-t1-local' ,'NORCE_CISM4-MAR364-ERA-t1-local' ,'NORCE_CISM5-MAR364-ERA-t1-local', 'UNN_Ua','NORCE_CISM2-MAR364-ERA-t1', 'NORCE_CISM3-MAR364-ERA-t1', 'NORCE_CISM4-MAR364-ERA-t1', 'NORCE_CISM4-MAR364-JRA-t1','NORCE_CISM5-MAR364-ERA-t1', 'ULB_fETISh-KoriBU2', 'IGE_ElmerIce' }
-%calvinggroup3 = {'ULB_fETISh-KoriBU1', 'UCSD_ISSM', 'UTAS_ElmerIce'}
-calvinggroup3 = {'ULB_fETISh-KoriBU1', 'UCSD_ISSM', 'DOE_MALI_4km', 'DOE_MALI_8km_Ant95', 'DOE_MALI_8km_AntMean','IMAU_UFEMISM1', 'IMAU_UFEMISM2','IMAU_UFEMISM3','IMAU_UFEMISM4',  'UTAS_ElmerIce'}
+calvinggroup1 = {'VUW_PISM1', 'VUW_PISM1_s1', 'VUW_PISM1_s2', 'VUW_PISM1_s3','VUW_PISM1_s4' ,'VUW_PISM2','VUW_PISM2_s1', 'VUW_PISM2_s2', 'VUW_PISM2_s3', 'VUW_PISM2_s4', 'PIK_PISM', 'LSCE_GRISLI2', 'LSCE_GRISLI','UCM_Yelmo','IMAU_UFEMISM1', 'IMAU_UFEMISM2', 'IMAU_UFEMISM3' ,'IMAU_UFEMISM4'}
+calvinggroup2 = {'DC_ISSM', 'ILTS_SICOPOLIS' ,'VUB_AISMPALEO','NCAR_CISM1',    'NORCE_CISM3-MAR364-ERA-t1-nonlocal','NORCE_CISM4-MAR364-ERA-t1-nonlocal','NORCE_CISM5-MAR364-ERA-t1-nonlocal','NCAR_CISM2', 'NORCE_CISM3-MAR364-ERA-t1-local','NORCE_CISM4-MAR364-ERA-t1-local' , 'NORCE_CISM5-MAR364-ERA-t1-local','UNN_Ua','NORCE_CISM2-MAR364-ERA-t1', 'NORCE_CISM3-MAR364-ERA-t1', 'NORCE_CISM4-MAR364-ERA-t1', 'NORCE_CISM4-MAR364-JRA-t1','NORCE_CISM5-MAR364-ERA-t1', 'UTAS_ElmerIce','ULB_fETISh-KoriBU2','IGE_ElmerIce','DOE_MALI_4km','DOE_MALI_8km_Ant95' ,'DOE_MALI_8km_AntMean'}
+calvinggroup3 = {'ULB_fETISh-KoriBU1', 'UCSD_ISSM'}
 
 
 yearlen = 360*24*60*60; %FIXME 360 day year OK?
@@ -155,8 +145,8 @@ expnum=0;
 for iexp=1:length(metadata.Model)
     if strcmp(convertCharsToStrings(metadata.Experiment{iexp}),"ctrlAE")
         continue
-    %elseif strcmp(convertCharsToStrings(metadata.MainSubmission{iexp}),"False")
-    %    continue % FIXME keep consistent with above loop
+    elseif strcmp(convertCharsToStrings(metadata.MainSubmission{iexp}),"False")
+        continue % FIXME keep consistent with above loop
     %elseif (strcmp(convertCharsToStrings(metadata.Group{iexp}),"IMAU") | strcmp(convertCharsToStrings(metadata.Group{iexp}),"DOE") )
     %    continue % FIXME keep consistent with above loop
     else
@@ -238,11 +228,7 @@ for iexp=1:length(metadata.Model)
         else 
              sens_group='very high melt sensitivity';
         end
-%         if sens <= mean_sens
-%             sens_group='low melt sensitivity'
-%         else 
-%             sens_group='high melt sensitivity';
-%         end            
+         
         meltsens_alltimeseries_values{end+1} = sens; 
         meltsens_alltimeseries{end+1}=sens_group;
                 
@@ -256,7 +242,6 @@ for iexp=1:length(metadata.Model)
             calving_alltimeseries{end+1}='Weak calving';
         elseif sum(i3)>0
             calving_alltimeseries{end+1}='No calving';
-            %calving_alltimeseries{end+1}='Weak calving';
         else
             error('no calving group assigned');
         end;
@@ -366,9 +351,9 @@ bin1, bin2, bin_size
 g1_alltimeseries = climate_alltimeseries;
 %g1_alltimeseries = init_alltimeseries;
 g2_alltimeseries = meltsens_alltimeseries;%
-g3_alltimeseries = meltparameterisation_alltimeseries; 
+%g3_alltimeseries = meltparameterisation_alltimeseries; 
 %g3_alltimeseries = calving_alltimeseries; 
-%g3_alltimeseries = ice_alltimeseries; 
+g3_alltimeseries = ice_alltimeseries; 
 %g3_alltimeseries = resolution_alltimeseries; 
 %g3_alltimeseries = glresolution_alltimeseries; 
 %g3_alltimeseries = subglmelt_alltimeseries; 
@@ -376,22 +361,7 @@ g3_alltimeseries = meltparameterisation_alltimeseries;
 %g3_alltimeseries = gia_alltimeseries; 
 %g3_alltimeseries = stressbalance_alltimeseries;
 
-
-%meltparameters_alltimeseries = {};
-
-%titlestring = 'var: , g1: init method, g2: melt sens, g3: stress balance'
-%titlestring = 'var: , g1: init method, g2: melt sens, g3: resolution'
-%titlestring = 'var: , cum BMR: climate, g2: melt sens, g3: calving'
-%titlestring = 'var: cum BMR, g1: climate, g2: melt sens, g3: ice model'
-%titlestring = 'var: , g1: climate, g2: melt sens, g3: resolution'
-%titlestring = 'var: , g1: climate, g2: melt sens, g3: gl resolution'
-%titlestring = 'var: , g1: climate, g2: melt sens, g3: subglmelt'
-%titlestring = 'var: , g1: climate, g2: melt sens, g3: melt parameterisation'
-%titlestring = 'var: , g1: climate, g2: melt sens, g3: init method'
-%titlestring = 'var: , g1: climate, g2: melt sens, g3: gia'
-%titlestring = 'var: , g1: climate, g2: melt sens, g3: stress balance'
-%titlestring = 'var: cum BMR, g1: climate, g2: melt param, g3: calving'
-titlestring = 'var: avg BMR, g1: climate, g2: melt sens, g3: melt parameterisation'
+titlestring = 'var: avg BMR, g1: climate, g2: melt sens, g3: ice model'
 
 
 
@@ -480,6 +450,10 @@ pos = get(h,'Position');
 
 
 title(titlestring)
+
+%%
+print(gcf, '-dpdf', '-painters', 'figures_2024_12/ANOVA3_avgBMR_'+sector+'_ClimateMeltsensIcemodel.pdf');
+print(gcf, '-dpng','-r300', '-painters', 'figures_2024_12/ANOVA3_avgBMR_'+sector+'_ClimateMeltsensIcemodel.png');
 
 
 %%

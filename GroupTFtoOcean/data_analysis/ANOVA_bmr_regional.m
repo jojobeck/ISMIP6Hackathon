@@ -4,15 +4,16 @@
 %% Define data to be explained
 % This script is based on Helene Seroussi's anova test for the AIS 2300 ISMIP6 paper currently in review
 
-% FIXME note this is updated to use _jb!
-varn = 'dslc_anom';  %varn = 'sle';
+varn = 'shelfmelt'; 
 
 %% Path to data, use mounted drive here 
 
 % local
 %computed_name = '/home/ronja/projects/MeltSensitivity/10528582/ComputedScalars/ComputedScalars'
 % mounted nci
-computed_name = '/home/ronja/projects/MeltSensitivity/ComputedScalars'
+%computed_name = '/mnt/ronja/nci/ismip6_hackathon/ComputedScalars'
+
+computed_name = '/home/ronja/projects/MeltSensitivity/ComputedScalarsHelene'
 
 
 %% Load metadata information
@@ -35,9 +36,13 @@ metadata = readtable("../../data_preprocessing/Metadata_IceFront_InitMethod_GIA_
 % metadata(i,'MeltParameterisation')
 % metadata.MeltParameterisation(i)
 
+%%
+yearlen = 360*24*60*60; %FIXME 360 day year OK?
+
+
 %% Load data 
 
-sector = "Wilkes" ;% "FRIS", %"RIS", "ASE", "Aurora", "Wilkes"
+sector = "AIS" ;% "FRIS", %"RIS", "ASE", "Aurora", "Wilkes"
 
 data_alltimeseries = NaN*ones(4*8,285);
 
@@ -48,12 +53,14 @@ for iexp=1:length(metadata.Model)
         continue
     elseif strcmp(convertCharsToStrings(metadata.MainSubmission{iexp}),"False")
         continue    % FIXME continue to exclude these?
-    %elseif (strcmp(convertCharsToStrings(metadata.Group{iexp}),"IMAU") | strcmp(convertCharsToStrings(metadata.Group{iexp}),"DOE") )
-    %    continue   % FIXME continue to exclude these?
+    elseif (strcmp(convertCharsToStrings(metadata.Group{iexp}),"IMAU"))
+        filename = append(computed_name,'/',metadata.Experiment{iexp},'/',varn,'/', ...
+            'jb_computed_', varn, '_AIS_', metadata.fileID{iexp},'_',metadata.Experiment{iexp},'.nc');
     else
-        filename = append(computed_name,'/',metadata.Experiment{iexp},'/',varn,'_jb','/', ...
+        filename = append(computed_name,'/',metadata.Experiment{iexp},'/',varn,'/', ...
             'computed_', varn, '_AIS_', metadata.fileID{iexp},'_',metadata.Experiment{iexp},'.nc');
-        
+    end
+
         if strcmp(sector, "ASE")
             data=ncread(filename,append(varn+"_sector_4")) ; 
         elseif strcmp(sector,"Aurora")
@@ -69,28 +76,21 @@ for iexp=1:length(metadata.Model)
             data2=ncread(filename,append(varn+"_sector_6")) ; 
             data = data1+data2;
         else
-            fprintf("No sector selected (correctly), loading whole AIS ")
             data=ncread(filename,append(varn)) ; 
        end;
         
-        %time=2016:2016+length(data)-1;
-
         expnum = expnum+1;
-
-		% FOR dynamic SLE
-        data_alltimeseries(expnum,:)= data(1:285)*1e12/1028/3.6e14;  % Gt convert to m SLE%-(data(1:285)-data(1))/(362.5*1000); %FIXME replace anomaly with ctrl?
-	end
+		% FOR BMB
+        data_alltimeseries(expnum,:)=-(data(1:285)-data(1))/1e12*yearlen;
 end
 
 % Save data 
-
-save("data/data_alltimeseries_"+sector+".mat", 'data_alltimeseries');
-%save("data/time_"+sector+".mat")
+save("data/data_alltimeseries_"+sector+"_BMR.mat", 'data_alltimeseries');
 
 %% Load data if you want to skip the part before
-sector = "Wilkes" ;% "FRIS", %"RIS", "ASE", "Aurora", "Wilkes"
+sector = "AIS" ;% "FRIS", %"RIS", "ASE", "Aurora", "Wilkes"
 
-data_alltimeseries = load("data/data_alltimeseries_"+sector+".mat", 'data_alltimeseries').data_alltimeseries;
+data_alltimeseries = load("data/data_alltimeseries_"+sector+"_BMR.mat", 'data_alltimeseries').data_alltimeseries;
 
 % these are string that sort the data into classes, e.g., subgrid melt
 % "yes" or "no", these groups will be tested in the ANOVA test
@@ -107,18 +107,14 @@ resolution_alltimeseries = {};
 init_alltimeseries = {};
 gia_alltimeseries = {};
 stressbalance_alltimeseries = {};
-dynamiclossfac_alltimeseries = {};
-
 
 % Calving groups:
 calvinggroup1 = {'VUW_PISM1', 'VUW_PISM1_s1', 'VUW_PISM1_s2', 'VUW_PISM1_s3','VUW_PISM1_s4' ,'VUW_PISM2','VUW_PISM2_s1', 'VUW_PISM2_s2', 'VUW_PISM2_s3', 'VUW_PISM2_s4', 'PIK_PISM', 'LSCE_GRISLI2', 'LSCE_GRISLI','UCM_Yelmo','IMAU_UFEMISM1', 'IMAU_UFEMISM2', 'IMAU_UFEMISM3' ,'IMAU_UFEMISM4'}
 calvinggroup2 = {'DC_ISSM', 'ILTS_SICOPOLIS' ,'VUB_AISMPALEO','NCAR_CISM1',    'NORCE_CISM3-MAR364-ERA-t1-nonlocal','NORCE_CISM4-MAR364-ERA-t1-nonlocal','NORCE_CISM5-MAR364-ERA-t1-nonlocal','NCAR_CISM2', 'NORCE_CISM3-MAR364-ERA-t1-local','NORCE_CISM4-MAR364-ERA-t1-local' , 'NORCE_CISM5-MAR364-ERA-t1-local','UNN_Ua','NORCE_CISM2-MAR364-ERA-t1', 'NORCE_CISM3-MAR364-ERA-t1', 'NORCE_CISM4-MAR364-ERA-t1', 'NORCE_CISM4-MAR364-JRA-t1','NORCE_CISM5-MAR364-ERA-t1', 'UTAS_ElmerIce','ULB_fETISh-KoriBU2','IGE_ElmerIce','DOE_MALI_4km','DOE_MALI_8km_Ant95' ,'DOE_MALI_8km_AntMean'}
 calvinggroup3 = {'ULB_fETISh-KoriBU1', 'UCSD_ISSM'}
 
-
 % Determine Melt Sensitivity groups
 ms = readtable("tables/best_ms_method_per_model.csv");
-dfac = readtable("../../GroupBMBtodSLR/data_analysis/tables/best_dils_per_model_v3.csv")
 
 yearlen = 360*24*60*60; %FIXME 360 day year OK?
 expnum=0;
@@ -128,8 +124,6 @@ for iexp=1:length(metadata.Model)
         continue
     elseif strcmp(convertCharsToStrings(metadata.MainSubmission{iexp}),"False")
         continue % FIXME keep consistent with above loop
-    %elseif (strcmp(convertCharsToStrings(metadata.Group{iexp}),"IMAU") | strcmp(convertCharsToStrings(metadata.Group{iexp}),"DOE") )
-    %    continue % FIXME keep consistent with above loop
     else
         
         expnum = expnum+1;
@@ -212,63 +206,7 @@ for iexp=1:length(metadata.Model)
 
         meltsens_alltimeseries_values{end+1} = sens; 
         meltsens_alltimeseries{end+1}=sens_group;
-            
-
-        % Add dynamics ice loss sensitivity group based on ice loss factors       
-        i = (strcmp(dfac.Model, metadata.fileID{iexp}) ) ; 
-        if strcmp(sector, "ASE")
-            sens = dfac.dils_Amundsen(i); 
-            very_small_sens = mean(dfac.dils_Amundsen) - std(dfac.dils_Amundsen); % smaller than mean - half a standard deviation
-            small_sens = mean(dfac.dils_Amundsen) - std(dfac.dils_Amundsen)/2; % smaller than mean - half a standard deviation
-            large_sens = mean(dfac.dils_Amundsen) + std(dfac.dils_Amundsen)/2;
-            very_large_sens = mean(dfac.dils_Amundsen) + std(dfac.dils_Amundsen);
-        elseif strcmp(sector,"Aurora") % FIXME WHOLE EAIS
-            sens = dfac.dils_Aurora(i); 
-            very_small_sens = mean(dfac.dils_Aurora) - std(dfac.dils_Aurora); % smaller than mean - half a standard deviation
-            small_sens = mean(dfac.dils_Aurora) - std(dfac.dils_Aurora)/2; % smaller than mean - half a standard deviation
-            large_sens = mean(dfac.dils_Aurora) + std(dfac.dils_Aurora)/2;
-            very_large_sens = mean(dfac.dils_Aurora) + std(dfac.dils_Aurora);
-        elseif strcmp(sector, "Wilkes") % FIXME WHOLE EAIS
-            sens = dfac.dils_Wilkes(i); 
-            very_small_sens = mean(dfac.dils_Wilkes) - std(dfac.dils_Wilkes);
-            small_sens = mean(dfac.dils_Wilkes) - std(dfac.dils_Wilkes)/2; % smaller than mean - half a standard deviation
-            large_sens = mean(dfac.dils_Wilkes) + std(dfac.dils_Wilkes)/2;
-            very_large_sens = mean(dfac.dils_Wilkes) + std(dfac.dils_Wilkes);
-        elseif strcmp(sector, "FRIS" )
-            sens = dfac.dils_FilchnerRonne(i); 
-            very_small_sens = mean(dfac.dils_FilchnerRonne) - std(dfac.dils_FilchnerRonne); % smaller than mean - half a standard deviation
-            small_sens = mean(dfac.dils_FilchnerRonne) - std(dfac.dils_FilchnerRonne)/2; % smaller than mean - half a standard deviation
-            large_sens = mean(dfac.dils_FilchnerRonne) + std(dfac.dils_FilchnerRonne)/2;
-            very_large_sens = mean(dfac.dils_FilchnerRonne) + std(dfac.dils_FilchnerRonne);
-        elseif strcmp(sector, "RIS")
-            sens = dfac.dils_Ross(i); 
-            very_small_sens = mean(dfac.dils_Ross) - std(dfac.dils_Ross); % smaller than mean - half a standard deviation
-            small_sens = mean(dfac.dils_Ross) - std(dfac.dils_Ross)/2; % smaller than mean - half a standard deviation
-            large_sens = mean(dfac.dils_Ross) + std(dfac.dils_Ross)/2;
-            very_large_sens = mean(dfac.dils_Ross) + std(dfac.dils_Ross);
-        else
-            fprintf("No sector selected (correctly), loading whole AIS ")
-            sens = dfac.dils_AIS(i); 
-            very_small_sens = mean(dfac.dils_AIS) - std(dfac.dils_AIS); % smaller than mean - half a standard deviation
-            small_sens = mean(dfac.dils_AIS) - std(dfac.dils_AIS)/2; % smaller than mean - half a standard deviation
-            large_sens = mean(dfac.dils_AIS) + std(dfac.dils_AIS)/2;
-            very_large_sens = mean(dfac.dils_AIS) + std(dfac.dils_AIS);
-        end
-
-        if sens <= very_small_sens
-             sens_group='very low dils';
-        elseif sens <= small_sens
-            sens_group ='low disl';
-        elseif sens <= large_sens
-            sens_group='medium dils';
-        elseif sens <= very_large_sens 
-             sens_group='high dils';
-        else 
-            sens_group='very high dils'
-        end;
-        dynamiclossfac_alltimeseries{end+1}=sens_group;
-
-
+                
         % Define calving groups based on calving criertia
         i1 = ( strcmp(convertCharsToStrings(metadata.fileID{iexp}), calvinggroup1)) ;
         i2 = ( strcmp(convertCharsToStrings(metadata.fileID{iexp}), calvinggroup2)) ;
@@ -279,7 +217,6 @@ for iexp=1:length(metadata.Model)
             calving_alltimeseries{end+1}='Weak calving';
         elseif sum(i3)>0
             calving_alltimeseries{end+1}='No calving';
-            %calving_alltimeseries{end+1}='Weak calving';
         else
             error('no calving group assigned');
         end;
@@ -336,28 +273,31 @@ for iexp=1:length(metadata.Model)
 end
 
 
-
+%
 % Print number of members in a bin?
 
+%%
 
-%% 3-way ANOVA
+% 3-way ANOVA
 
 % select groups for 3-way anova
 g1_alltimeseries = climate_alltimeseries;
 %g1_alltimeseries = init_alltimeseries;
 g2_alltimeseries = meltsens_alltimeseries;
-g3_alltimeseries = dynamiclossfac_alltimeseries;
-%g3_alltimeseries = calving_alltimeseries; 
+g3_alltimeseries = calving_alltimeseries; 
 %g3_alltimeseries = ice_alltimeseries; 
 %g3_alltimeseries = resolution_alltimeseries; 
 %g3_alltimeseries = glresolution_alltimeseries; 
 %g3_alltimeseries = subglmelt_alltimeseries; 
-%g3_alltimeseries = meltparameterisation_alltimeseries; 
+%g2_alltimeseries = meltparameterisation_alltimeseries; 
 %g3_alltimeseries = init_alltimeseries;
 %g3_alltimeseries = gia_alltimeseries; 
 %g3_alltimeseries = stressbalance_alltimeseries;
 
-titlestring = 'var: dslc, g1: climate, g2: melt sens, g3: model sens'
+
+%meltparameters_alltimeseries = {};
+
+titlestring = 'var: BMR, g1: climate, g2: melt sens, g3: calving'
 
 
 
@@ -374,7 +314,7 @@ var_error=zeros(285,1);
 
 for yeari=2:285,
 		individual_results=data_alltimeseries(:,yeari);
-		[p,tabl]=anovan(individual_results,{g1_alltimeseries,g2_alltimeseries,g3_alltimeseries},...
+		[p,tabl,stats]=anovan(individual_results,{g1_alltimeseries,g2_alltimeseries,g3_alltimeseries},...
 			'model',2,'display','off', 'sstype', 1) ;
 		var_g1(yeari)=tabl{2,2}/length(g1_alltimeseries);
 		var_g2(yeari)=tabl{3,2}/length(g1_alltimeseries);
@@ -409,7 +349,8 @@ xlim([2017 2300])
 %ylim([0 1.8])
 legend('g1','g2','g3','g1-g2','g1-g3','g2-g3','3-way interaction','total','location','West','fontsize',13)
 xlabel('Year','fontsize',13)
-ylabel('\sigma (m SLE)','fontsize',13)
+%ylabel('\sigma (m SLE)','fontsize',13)
+ylabel('\sigma (Gt/a)','fontsize',13)
 text(2005,0,'a','VerticalAlignment','middle','HorizontalAlignment','right','fontsize',16,'fontweight','b');
 set(gca,'fontsize',13)
 
@@ -443,20 +384,35 @@ set(h,'PaperPositionMode','Auto','PaperUnits','Inches','PaperSize',[pos(3), pos(
 pos = get(h,'Position');
 %print(gcf, '-dpdf', '-painters', 'Figures/ANOVA_withcollapse.pdf');
 
-
 title(titlestring)
 
 
-%% SAVE
 
-print(gcf, '-dpdf', '-painters', 'figures_2024_12/ANOVA3_DSLC_'+sector+'_ClimateMeltSensIceModelSens.pdf');
-
-print(gcf, '-dpng', '-r300', '-painters', 'figures_2024_12/ANOVA3_DSLC_'+sector+'_ClimateMeltSensIceModelSens.png');
+%%
+print(gcf, '-dpdf', '-painters', 'figures_2024_12/ANOVA3_BMR_'+sector+'_ClimateMeltsensCalving.pdf');
 
 
+%%%%%%%%%%%%%%%
+%%
+% figure; hold all;
+% for i=1:length(meltsens_alltimeseries_values)
+%     scatter(i,meltsens_alltimeseries_values{i})
+%     text(i,meltsens_alltimeseries_values{i}, meltparameterisation_alltimeseries{i})
+% end
 
+figure; hold all;
+for i=1:length(meltsens_alltimeseries_values)
+    scatter(i,data_alltimeseries(i,85))
+    text(i,data_alltimeseries(i,85), meltsens_alltimeseries{i})
+end
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 
+% figure; hold all;
+% for i=1:length(meltsens_alltimeseries_values)
+%     plot(data_alltimeseries(i,:))
+%     %text(i,data_alltimeseries(i,85), meltsens_alltimeseries{i})
+% end
+
 %% test 1 way anova
 
 g1_data = meltsens_alltimeseries;
