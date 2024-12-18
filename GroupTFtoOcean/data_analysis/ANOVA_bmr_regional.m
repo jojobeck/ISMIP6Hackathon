@@ -88,7 +88,7 @@ end
 save("data/data_alltimeseries_"+sector+"_BMR.mat", 'data_alltimeseries');
 
 %% Load data if you want to skip the part before
-sector = "AIS" ;% "FRIS", %"RIS", "ASE", "Aurora", "Wilkes"
+%sector = "AIS" ;% "FRIS", %"RIS", "ASE", "Aurora", "Wilkes"
 
 data_alltimeseries = load("data/data_alltimeseries_"+sector+"_BMR.mat", 'data_alltimeseries').data_alltimeseries;
 
@@ -390,6 +390,7 @@ title(titlestring)
 
 %%
 print(gcf, '-dpdf', '-painters', 'figures_2024_12/ANOVA3_BMR_'+sector+'_ClimateMeltsensCalving.pdf');
+print(gcf, '-dpng','-r300', '-painters', 'figures_2024_12/ANOVA3_BMR_'+sector+'_ClimateMeltsensCalving.png');
 
 
 %%%%%%%%%%%%%%%
