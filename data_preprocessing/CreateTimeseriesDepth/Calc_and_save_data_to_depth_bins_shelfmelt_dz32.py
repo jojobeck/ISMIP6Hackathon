@@ -6,7 +6,7 @@ import os
 import pandas as pd
 import function_sampling_Thermal_forcing_files as fn
 
-grid = 8
+grid =32
 mnt_pth = '/home/565/jb1863/' #mnt/ronja/nci/' #mount path
 pth_calc_output = mnt_pth + 'ismip6_hackathon/ComputedScalars_bin/' #write folder
 pth_ismip6 =mnt_pth + 'ismip6_2300/' #read folder

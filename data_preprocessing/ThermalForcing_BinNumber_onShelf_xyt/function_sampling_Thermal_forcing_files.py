@@ -112,6 +112,29 @@ def assure_minimum_same_timelength(mask,bins,base):
         base_trun = base
     return(mask_trun,bins_trun,base_trun)
 
+def assure_minimum_same_timelength4(mask,bins,base,ice):
+    #ensure same time length
+    min_length = min(mask.time.size, bins.time.size, base.time.size,ice.time.size)
+    # Truncate datasets along the time axis if their sizes are different
+    if mask.time.size > min_length:
+        mask_trun = mask.isel(time=slice(0, min_length))
+    else:
+        mask_trun = mask
+
+    if bins.time.size > min_length:
+        bins_trun = bins.isel(time=slice(0, min_length))
+    else:
+        bins_trun = bins
+
+    if base.time.size > min_length:
+        base_trun = base.isel(time=slice(0, min_length))
+    else:
+        base_trun = base
+    if ice.time.size > min_length:
+        ice_trun = ice.isel(time=slice(0, min_length))
+    else:
+        ice_trun = ice
+    return(mask_trun,bins_trun,base_trun,ice_trun)
 def create_empty_dummy_t(variable_name, time_coord):
     # Create an empty dataset with time coordinates
     d_calc = xr.Dataset(coords={'time': time_coord})
@@ -519,6 +542,8 @@ def create_loop_info_gl(mnt_pth, expnames, removeFileID, metadata_file):
             thermalPos = [i for i, fileName in enumerate(expFilesTf) if fileName.startswith('shelf_thermalforcingInterp')]
             if modelPath == 'VUW_PISM1_s1':
                 meltPos = [i for i, fileName in enumerate(expFiles) if fileName.startswith('libmassbffl')and  'VUW_PISM1-s1' in fileName]
+            if (modelPath == 'IMAU_UFEMISM1') or (modelPath =='IMAU_UFEMISM2') or (modelPath =='IMAU_UFEMISM3') or (modelPath == 'IMAU_UFEMISM4'):
+                maskPos = [i for i, fileName in enumerate(expFiles) if fileName.startswith('new_sftflf')]
             # Save into processed_data
             loop_info_in.append({
                 'basefile': expFiles[draftPos[0]],

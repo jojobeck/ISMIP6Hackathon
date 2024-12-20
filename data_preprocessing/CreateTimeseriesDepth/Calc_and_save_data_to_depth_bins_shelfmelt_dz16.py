@@ -6,7 +6,7 @@ import os
 import pandas as pd
 import function_sampling_Thermal_forcing_files as fn
 
-grid = 8
+grid =16
 mnt_pth = '/home/565/jb1863/' #mnt/ronja/nci/' #mount path
 pth_calc_output = mnt_pth + 'ismip6_hackathon/ComputedScalars_bin/' #write folder
 pth_ismip6 =mnt_pth + 'ismip6_2300/' #read folder
@@ -46,8 +46,9 @@ variable_name = 'shelfmelt' #please don't change
 dA = (grid *1000 *grid *1000)
 
 
-def process_file(fi):
+# def process_file(fi):
     
+for fi in range(len(loop_info.index)):
     pth = loop_info['path'][fi]
     grid = loop_info['Grid'][fi]
     exp = loop_info['Experiment'][fi]
@@ -80,8 +81,8 @@ def process_file(fi):
                            
 
     #ensure same time length and truncate dataset if neccessary
-    mask_trun,bins_trun,tf_trun=fn.assure_minimum_same_timelength(mask,bins,tf)
-    mask_trun,bins_trun,mask_ice_trun=fn.assure_minimum_same_timelength(mask,bins,mask_ice)
+    mask_trun,bins_trun,tf_trun,mask_ice_trun=fn.assure_minimum_same_timelength4(mask,bins,tf,mask_ice)
+# mask_trun,bins_trun,mask_ice_trun=fn.assure_minimum_same_timelength(mask,bins,mask_ice)
     # Create the mask for floating cells over time
     # create emptty dataset
     d_calc=fn.create_empty_dummy_zt(variable_name,depth,tf_trun.time)
@@ -132,14 +133,14 @@ def process_file(fi):
     tf_trun.close()
     d_calc.close()
 
-    return f"Done processing {model}"
+# return f"Done processing {model}"
 
 # Main execution
-if __name__ == "__main__":
-    with concurrent.futures.ProcessPoolExecutor() as executor:
-        futures = [executor.submit(process_file, fi) for fi in range(len(loop_info.index))]
-        for future in concurrent.futures.as_completed(futures):
-            print(future.result())
+# with concurrent.futures.ProcessPoolExecutor() as executor:
+# futures = [executor.submit(process_file, fi) for fi in range(len(loop_info.index))]
+# for future in concurrent.futures.as_completed(futures):
+# print(future.result())
+
 
 print('All Done :-D')    
 

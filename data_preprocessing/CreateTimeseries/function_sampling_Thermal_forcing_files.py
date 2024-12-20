@@ -34,9 +34,12 @@ def process_model_tf(results_exp,i,experiment,tf,zbnd):
 
     maskData = xr.open_dataset(results_exp.iloc[i].path + '/' + results_exp.iloc[i].mask_file)
     maskfile = results_exp.iloc[i].mask_file
-    maskfile_ice= maskfile.replace('sftflf','sftgif')
+    if (results_exp.iloc[i].Model =='IMAU_UFEMISM1') or (results_exp.iloc[1].Model == 'IMAU_UFEMISM2') or (results_exp.iloc[i].Model =='IMAU_UFEMISM3')or (results_exp.iloc[i].Model =='IMAU_UFEMISM4'):
+        maskfile_ice= maskfile.replace('new_sftflf','sftgif')
+    else:
+        maskfile_ice= maskfile.replace('sftflf','sftgif')
     mask_ice = xr.open_dataset(results_exp.iloc[i].path +'/'+maskfile_ice)
-    no_ice=mask_ice.sftgif.values ==0
+    no_ice=mask_ice.sftgif.values <=0
 
     # maskData.sftflf.values[no_ice]=np.nan
 
@@ -73,6 +76,22 @@ def tf_z_for_exp(forcing_data_path,experiment,name,res):
             forcing_data_path+name +"obs_thermal_forcing_1995-2017_"+str(int(res))+"km_x_60m.nc")
         zbnd = tf.get('z_bnds').values
     return(tf,zbnd)
+def min_time_size_dataset(*datasets):
+    """
+    Returns the dataset with the minimum time.size from the given datasets.
+    Parameters:
+    *datasets : xarray.Dataset
+        An unlimited number of xarray datasets.
+    Returns:
+    xarray.Dataset
+        The dataset with the minimum time.size.
+    """
+    if not datasets:
+        raise ValueError("At least one dataset must be provided")
+
+    min_dataset = min(datasets, key=lambda ds: ds.time.size)
+    return (min_dataset)
+
 def assure_minimum_same_timelength(mask,bins,base):
     #ensure same time length
     min_length = min(mask.time.size, bins.time.size, base.time.size)
@@ -93,6 +112,29 @@ def assure_minimum_same_timelength(mask,bins,base):
         base_trun = base
     return(mask_trun,bins_trun,base_trun)
 
+def assure_minimum_same_timelength4(mask,bins,base,ice):
+    #ensure same time length
+    min_length = min(mask.time.size, bins.time.size, base.time.size,ice.time.size)
+    # Truncate datasets along the time axis if their sizes are different
+    if mask.time.size > min_length:
+        mask_trun = mask.isel(time=slice(0, min_length))
+    else:
+        mask_trun = mask
+
+    if bins.time.size > min_length:
+        bins_trun = bins.isel(time=slice(0, min_length))
+    else:
+        bins_trun = bins
+
+    if base.time.size > min_length:
+        base_trun = base.isel(time=slice(0, min_length))
+    else:
+        base_trun = base
+    if ice.time.size > min_length:
+        ice_trun = ice.isel(time=slice(0, min_length))
+    else:
+        ice_trun = ice
+    return(mask_trun,bins_trun,base_trun,ice_trun)
 def create_empty_dummy_t(variable_name, time_coord):
     # Create an empty dataset with time coordinates
     d_calc = xr.Dataset(coords={'time': time_coord})
@@ -214,7 +256,7 @@ def process_data_mask(d_in, draft_in, zbnd, tf_in, time_model,d_calc,d_bin):
     tf = tf_in.sel(time=slice(str(int(time_model[0])),str(time_end)))
     d = d_in.sel(time=slice(str(int(time_model[0])),str(time_end)))
     draft = draft_in.sel(time=slice(str(int(time_model[0])),str(time_end)))
-    m =  d.sftflf.values > 0.5 #take mainly floating cells
+    m =  d.sftflf.values > 0 #take mainly floating cells
     draft.base.values[~m] = 100
     
     shelf_draft_bin = np.empty(draft.base.shape)
@@ -241,7 +283,7 @@ def process_data_ctrl_mask(d, draft, zbnd, tf_in, time_model,d_calc,d_bin):
     tf_values = tf_in.thermal_forcing.values
 # d = d_in.sel(time=slice(str(int(time_model[0])),str(time_end)))
 # draft = draft_in.sel(time=slice(str(int(time_model[0])),str(time_end)))
-    m =  d.sftflf.values > 0.5 #take mainly floating cells
+    m =  d.sftflf.values > 0 #take mainly floating cells
     draft.base.values[~m] = 100
     
     shelf_draft_bin = np.empty(draft.base.shape)
@@ -272,7 +314,7 @@ def process_data(d, draft, zbnd, tf, time_model,d_calc,d_bin):
     for timei, time in enumerate(time_model[time_model <= time_end]):
         print(time)
         m_in = d.isel(time=timei).sftflf.values
-        m = m_in > 0.5  # takes cells that are mostly floating
+        m = m_in > 0  # takes cells that are mostly floating
         shelf_draft = draft.isel(time=timei).base.values
         shelf_draft[~m] = 100
         shelf_draft_bin = np.empty(shelf_draft.shape)
@@ -302,7 +344,7 @@ def process_data(d, draft, zbnd, tf, time_model,d_calc,d_bin):
 
 def process_data_ctrlrun(d, draft, zbnd, tf, time_model, d_calc, d_bin):
     # Precompute the mask for floating cells for all times
-    m_floating = d.sftflf.values > 0.5
+    m_floating = d.sftflf.values > 0
 
     # Precompute the thermal forcing values
     tf_values = tf.thermal_forcing.values
@@ -342,7 +384,7 @@ def process_data_withInterp_ctrlrun(d, draft, zbnd, tf, time_model,d_calc):
     for timei, time in enumerate(time_model):
         print(time)
         m_in = d.isel(time=timei).sftflf.values
-        m = m_in > 0.5  # takes cells that are mostly floating
+        m = m_in > 0  # takes cells that are mostly floating
         shelf_draft = draft.isel(time=timei).base.values
         shelf_draft[~m] = 100
         shelf_draft_bin = np.empty(shelf_draft.shape)
@@ -395,7 +437,7 @@ def process_data_withInterp(d, draft, zbnd, tf, time_model,d_calc):
     for timei, time in enumerate(time_model[time_model <= time_end]):
         print(time)
         m_in = d.isel(time=timei).sftflf.values
-        m = m_in > 0.5  # takes cells that are mostly floating
+        m = m_in > 0 # takes cells that are mostly floating
         shelf_draft = draft.isel(time=timei).base.values
         shelf_draft[~m] = 100
         shelf_draft_bin = np.empty(shelf_draft.shape)
@@ -458,6 +500,68 @@ def get_time_model(d):
     return(time_model)
     
 # function_sample_thermal_forcing.py
+def create_loop_info_gl(mnt_pth, expnames, removeFileID, metadata_file):
+    pth_ismip6 = os.path.join(mnt_pth, 'ismip6_2300/')
+
+    dataDirTf = f'{mnt_pth}/ismip6_hackathon/dataset_2HD'
+    dirPath = pth_ismip6
+
+    metadata = pd.read_csv(metadata_file)
+
+    models = metadata.loc[(metadata['Experiment'].isin(expnames)) &
+                          ~(metadata['fileID'].isin(removeFileID)),]
+
+    # Initialize empty list to store processed data
+    loop_info_in = []
+
+    for i in range(models.shape[0]):
+        modelPath = models.iloc[i].fileID
+        exp = models.iloc[i].Experiment
+        modelFiles = os.listdir(dirPath + '/' + modelPath)
+        expDirPos = [i for i, dirName in enumerate(modelFiles) if dirName.startswith(exp)]
+# modelFilesTf = os.listdir(dataDirTf + '/' + modelPath)
+
+        # For each relevant directory, loop
+        for expdir_subgrid in expDirPos:
+            expDir = modelFiles[expdir_subgrid]
+            expFiles = os.listdir(dirPath + '/' + modelPath + '/' + expDir)
+
+            expFilesTf = os.listdir(dataDirTf + '/' + modelPath + '/' + expDir)
+
+            # Get grid size from expDir: format expAE01_04 where 04 is the grid size and convert to int
+            grid = int(expDir.split('_')[1])
+
+            # Find position of relevant files
+# draftPos = [i for i, fileName in enumerate(expFiles) if fileName.startswith('base') and  modelPath in fileName]
+# meltPos = [i for i, fileName in enumerate(expFiles) if fileName.startswith('libmassbffl')and  modelPath in fileName]
+# maskPos = [i for i, fileName in enumerate(expFiles) if fileName.startswith('sftflf')and  modelPath in fileName]
+# thermalPos = [i for i, fileName in enumerate(expFilesTf) if fileName.startswith('shelf_thermalforcingInterp')and  modelPath in fileName]
+            draftPos = [i for i, fileName in enumerate(expFiles) if fileName.startswith('base') ]
+            meltPos = [i for i, fileName in enumerate(expFiles) if fileName.startswith('libmassbffl')]
+            maskPos = [i for i, fileName in enumerate(expFiles) if fileName.startswith('sftflf')]
+            thermalPos = [i for i, fileName in enumerate(expFilesTf) if fileName.startswith('shelf_thermalforcingInterp')]
+            if modelPath == 'VUW_PISM1_s1':
+                meltPos = [i for i, fileName in enumerate(expFiles) if fileName.startswith('libmassbffl')and  'VUW_PISM1-s1' in fileName]
+            if (modelPath == 'IMAU_UFEMISM1') or (modelPath =='IMAU_UFEMISM2') or (modelPath =='IMAU_UFEMISM3') or (modelPath == 'IMAU_UFEMISM4'):
+                maskPos = [i for i, fileName in enumerate(expFiles) if fileName.startswith('new_sftflf')]
+            # Save into processed_data
+            loop_info_in.append({
+                'basefile': expFiles[draftPos[0]],
+                'libmassbfflfile': expFiles[meltPos[0]],
+                'maskfile': expFiles[maskPos[0]],
+                'thermalforcingfile': expFilesTf[thermalPos[0]],
+                'path': os.path.join(dirPath, modelPath, expDir),
+                'pathTf': dataDirTf + '/' + modelPath + '/' + expDir,
+                'Experiment': exp,
+                'Model':  modelPath,
+                'Grid': grid
+            })
+
+    # Convert to DataFrame
+    loop_info = pd.DataFrame(loop_info_in)
+    ind= loop_info.index[loop_info.path =='/home/565/jb1863/ismip6_2300/NORCE_CISM5-MAR364-ERA-t1-local/expAE05_16_old'].tolist()
+    loop_info = loop_info[loop_info.index != ind[0]].reset_index(drop=True)
+    return loop_info
 
 def create_loop_info(mnt_pth, expnames, removeFileID, metadata_file):
     pth_ismip6 = os.path.join(mnt_pth, 'ismip6_2300/')
@@ -487,9 +591,20 @@ def create_loop_info(mnt_pth, expnames, removeFileID, metadata_file):
             grid = int(expDir.split('_')[1])
 
             # Find position of relevant files
-            draftPos = [i for i, fileName in enumerate(expFiles) if fileName.startswith('base')]
+# if modelPath == 'UCSD_ISSM':
+# modelPath ='ISSM'
+# if modelPath == 'VUW_PISM1_s1':
+# modelPath ='VUW_PISM1-s1'
+# draftPos = [i for i, fileName in enumerate(expFiles) if fileName.startswith('base') and  modelPath in fileName]
+# meltPos = [i for i, fileName in enumerate(expFiles) if fileName.startswith('libmassbffl') and  modelPath in fileName]
+# maskPos = [i for i, fileName in enumerate(expFiles) if fileName.startswith('sftflf') and  modelPath in fileName]
+            draftPos = [i for i, fileName in enumerate(expFiles) if fileName.startswith('base') ]
             meltPos = [i for i, fileName in enumerate(expFiles) if fileName.startswith('libmassbffl')]
             maskPos = [i for i, fileName in enumerate(expFiles) if fileName.startswith('sftflf')]
+            if modelPath == 'VUW_PISM1_s1':
+                meltPos = [i for i, fileName in enumerate(expFiles) if fileName.startswith('libmassbffl')and  'VUW_PISM1-s1' in fileName]
+            if (modelPath == 'IMAU_UFEMISM1') or (modelPath =='IMAU_UFEMISM2') or (modelPath =='IMAU_UFEMISM3') or (modelPath == 'IMAU_UFEMISM4'):
+                maskPos = [i for i, fileName in enumerate(expFiles) if fileName.startswith('new_sftflf')]
 
             # Save into processed_data
             loop_info_in.append({
@@ -503,11 +618,9 @@ def create_loop_info(mnt_pth, expnames, removeFileID, metadata_file):
 
     # Convert to DataFrame
     loop_info = pd.DataFrame(loop_info_in)
-    # Note: I think the next two lines are covered by the above check that we are in a given list of experiments
-    #ind= loop_info.index[loop_info.path ==mnt_pth+'/ismip6_2300/NORCE_CISM5-MAR364-ERA-t1-local/expAE05_16_old'].tolist()
-    #loop_info = loop_info[loop_info.index != ind[0]].reset_index(drop=True)
+    ind= loop_info.index[loop_info.path =='/home/565/jb1863/ismip6_2300/NORCE_CISM5-MAR364-ERA-t1-local/expAE05_16_old'].tolist()
+    loop_info = loop_info[loop_info.index != ind[0]].reset_index(drop=True)
     return loop_info
-
-def correct_runs_missing_exp(df,mnt_pth):
-    df = df[(df.path == mnt_pth+'/ismip6_2300/NORCE_CISM5-MAR364-ERA-t1-local/expAE05_16') | (df.Model =='ULB_fETISh-KoriBU2')].reset_index(drop=True)
+def correct_runs_missing_exp(df):
+    df = df[(df.path == '/home/565/jb1863/ismip6_2300/NORCE_CISM5-MAR364-ERA-t1-local/expAE05_16') | (df.Model =='ULB_fETISh-KoriBU2')].reset_index(drop=True)
     return df

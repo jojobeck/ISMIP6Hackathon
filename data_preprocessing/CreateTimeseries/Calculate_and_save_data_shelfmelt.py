@@ -43,9 +43,9 @@ for fi in range(len(loop_info.index)):
     exp = loop_info['Experiment'][fi]
     model = loop_info['Model'][fi]
     maskfile = loop_info['mask_file'][fi]
-    maskfile_ice= maskfile.replace('sftflf','sftgif')
-    melt = xr.open_dataset(pth+'/'+maskfile.replace('sftflf','libmassbffl'))
-    maskfile = maskfile.replace('sftflf_AIS_','new_sftflf_AIS_')
+    maskfile_ice= maskfile.replace('new_sftflf','sftgif')
+    melt = xr.open_dataset(pth+'/'+maskfile.replace('new_sftflf','libmassbffl'))
+# maskfile = maskfile.replace('sftflf_AIS_','new_sftflf_AIS_')
     scalefac_pth= f'/home/565/jb1863/ismip6_2300/masks/af2_el_ismip6_ant_{grid}km.nc'
     #loadscaling mask
     scalefac_model= xr.open_dataset(scalefac_pth)

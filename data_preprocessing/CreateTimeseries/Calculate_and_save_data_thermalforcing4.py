@@ -9,9 +9,10 @@
 import numpy as np
 import xarray as xr
 import os
+from matplotlib import pylab as plt
 import pandas as pd
 import function_sampling_Thermal_forcing_files as fn
-
+grid = 4
 
 mnt_pth = '/home/565/jb1863/' #mnt/ronja/nci/' #mount path
 pth_calc_output = mnt_pth + 'ismip6_hackathon/ComputedScalars/' #write folder
@@ -19,22 +20,22 @@ pth_ismip6 =mnt_pth + 'ismip6_2300/' #read folder
 pth_helene =mnt_pth + 'ismip6_hackathon/ComputedScalarsHelene/'
 
 expnames = ['expAE02', 'expAE03', 'expAE04', 'expAE05', 'ctrlAE']
-# removeFileID = ['IMAU_UFEMISM1', 'IMAU_UFEMISM2', 'IMAU_UFEMISM3', 'IMAU_UFEMISM4',
-# 'DOE_MALI_4km', 'DOE_MALI_8km_Ant95', 'DOE_MALI_8km_AntMean'] # specify models to remove
+removeFileID = []
 
 metadata_file = 'Metadata.txt'
 # Generate loop_info DataFrame
 loop_info = fn.create_loop_info(mnt_pth, expnames, removeFileID, metadata_file)
 # do 8km for now
-# do 8km for now
-loop_info=loop_info[loop_info.Grid ==8].reset_index(drop=True)
+loop_info=loop_info[loop_info.Grid ==grid].reset_index(drop=True)
 
 # CHeck why VUW PISM has weired thermal forcing
-# loop_info = loop_info.iloc[41:]
-# loop_info = loop_info.reset_index(drop = True)
+# loop_info = loop_info[loop_info['Model'].isin(['DOE_MALI_2','DOE_MALI_3' ])].reset_index(drop = True)
 
+scalefac_pth= f'/home/565/jb1863/ismip6_2300/masks/af2_el_ismip6_ant_{grid}km.nc'
+#loadscaling mask
+scalefac_model= xr.open_dataset(scalefac_pth)
 
-variable_name = 'thermalforcingBin' #please don't change
+variable_name = 'thermalforcing' #please don't change
 
 
 for fi in range(len(loop_info.index)):
@@ -58,35 +59,33 @@ for fi in range(len(loop_info.index)):
     mask_ice = xr.open_dataset(pth+'/'+maskfile_ice)
     
     path_save, file_end=fn.get_outpath_tf_filend(loop_info,fi)
-    tf = xr.open_dataset(path_save +'/shelf_thermalforcingBin'+file_end)
-    #attention, VUW PISM fill nan values was not detected as np.nan from xarray,
-    #there replace with nan 
-    mn = tf.thermalforcing_bin.values <=-1e6 
-    tf.thermalforcing_bin.values[mn] =np.nan
+    tf = xr.open_dataset(path_save +'/shelf_thermalforcingInterp'+file_end)
+# mn = tf.thermalforcing_interp.values <=-1e6
+# tf.thermalforcing_interp.values[mn] =np.nan
     
  
     #ensure same time length and truncate dataset if neccessary
-    mask_trun,tf_trun,tff=fn.assure_minimum_same_timelength(mask,tf,tf)
+    mask_trun,tf_trun,mask_ice_trun=fn.assure_minimum_same_timelength(mask,tf,mask_ice)
 
     d_calc=fn.create_empty_dummy_t(variable_name,mask_trun.time)
    
 
     # Loop through each variable in the dataset
-    mask_floating = mask_trun.sftflf.values > 0 
-    # adjust ice mask
-    m_ice = mask_ice.sftgif.values >0; #because in the end Helen set all values bigger 1 to 1 and allows values between 0 and 1
-    mask_floating =mask_floating & m_ice
+    mask_floating = mask_trun.sftflf.values
+    m_ice = mask_ice_trun.sftgif.values
+    #mask handling as Helene
+    m_ice[m_ice<0]=0
+    m_ice[m_ice>1]=1
+    mask_floating[mask_floating<0]=0
+    mask_floating[mask_floating>1]=1
     for var_name in d_calc.variables:
         if (var_name != 'time') and (var_name != 'z') :
             print(var_name)
             smask = sector_masks[int(var_name.split('_')[-1])] if 'sector' in var_name else region_masks[int(var_name.split('_')[-1])] if 'region' in var_name else d_region.sectors.values > 0
 
-            m_flotregion = mask_floating & smask  # mask region and shelf extent over time
-            masked_values = np.where(m_flotregion, tf_trun.thermalforcing_bin.values, np.nan)
-                                                                                                                                                                                                                                              
-            # Compute the mean along the time axis, ignoring NaNs
-            mean_values = np.nanmean(masked_values, axis=(1, 2))
-
+            TF_total=np.nansum(tf_trun.thermalforcing_interp.values*mask_floating *m_ice*scalefac_model.af2.values*smask,axis=(1,2)) 
+            shelf_total=np.nansum(mask_floating *m_ice*scalefac_model.af2.values*smask,axis=(1,2)) #in kg/s
+            mean_values = TF_total/shelf_total
             d_calc[var_name].values = mean_values
             
     # save data 
@@ -97,7 +96,6 @@ for fi in range(len(loop_info.index)):
     os.makedirs(os.path.dirname(path_save), exist_ok=True)
     d_calc.to_netcdf(path_save+save_name)
 
-    #break
     
     
 print('Done :-)')
