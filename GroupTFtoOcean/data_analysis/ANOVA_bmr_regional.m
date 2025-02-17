@@ -216,7 +216,7 @@ for iexp=1:length(metadata.Model)
         elseif sum(i2)>0
             calving_alltimeseries{end+1}='Weak calving';
         elseif sum(i3)>0
-            calving_alltimeseries{end+1}='No calving';
+            calving_alltimeseries{end+1}='Weak calving';
         else
             error('no calving group assigned');
         end;
@@ -297,8 +297,8 @@ g3_alltimeseries = calving_alltimeseries;
 
 %meltparameters_alltimeseries = {};
 
-titlestring = 'var: BMR, g1: climate, g2: melt sens, g3: calving'
-
+%titlestring = 'var: BMR, g1: climate, g2: melt sens, g3: calving'
+titlestring = ''
 
 
 %Calculate variance and relative variance
@@ -347,7 +347,9 @@ ax = gca;
 ax.Layer = 'top';
 xlim([2017 2300])
 %ylim([0 1.8])
-legend('g1','g2','g3','g1-g2','g1-g3','g2-g3','3-way interaction','total','location','West','fontsize',13)
+%legend('g1','g2','g3','g1-g2','g1-g3','g2-g3','3-way interaction','total','location','West','fontsize',13)
+legend('climate','melt sensitivity','calving group','climate-melt sensitivity','climate-calving group','melt sensitivity-calving group','3-way interaction','total','location','NorthWest','fontsize',13)
+
 xlabel('Year','fontsize',13)
 %ylabel('\sigma (m SLE)','fontsize',13)
 ylabel('\sigma (Gt/a)','fontsize',13)
@@ -366,7 +368,9 @@ a(4).FaceColor=[170 51 119]/256;
 a(5).FaceColor=[34 136 51]/256;
 a(6).FaceColor=[68 19 170]/256;
 a(7).FaceColor=[187 187 187]/256;
-legend('g1','g2','g3','g1-g2','g1-g3','g2-g3','3-way interaction','location','West','fontsize',13)
+%legend('g1','g2','g3','g1-g2','g1-g3','g2-g3','3-way interaction','location','West','fontsize',13)
+legend('climate','melt sensitivity','calving group','climate-melt sensitivity','climate-calving group','melt sensitivity-calving group','3-way interaction','total','location','NorthEast','fontsize',13)
+
 grid on
 ax = gca;
 ax.Layer = 'top';
@@ -389,8 +393,8 @@ title(titlestring)
 
 
 %%
-print(gcf, '-dpdf', '-painters', 'figures_2024_12/ANOVA3_BMR_'+sector+'_ClimateMeltsensCalving.pdf');
-print(gcf, '-dpng','-r300', '-painters', 'figures_2024_12/ANOVA3_BMR_'+sector+'_ClimateMeltsensCalving.png');
+print(gcf, '-dpdf', '-painters', 'figures_2025_02/ANOVA3_BMR_'+sector+'_ClimateMeltsensCalving.pdf');
+print(gcf, '-dpng','-r300', '-painters', 'figures_2025_02/ANOVA3_BMR_'+sector+'_ClimateMeltsensCalving.png');
 
 
 %%%%%%%%%%%%%%%
