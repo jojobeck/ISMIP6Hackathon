@@ -19,11 +19,11 @@
 17,DOE,MALI,expAE03,HadGEM2,DOE\_MALI\_8km\_AntMean,DOE_MALI_8km_AntMean,False,Quad. Non-local,AntMean median,8km,2km,Floating condition,No melt,RO,DA+,HO,No
 18,DOE,MALI,expAE04,CESM2,DOE\_MALI\_8km\_AntMean,DOE_MALI_8km_AntMean,False,Quad. Non-local,AntMean median,8km,2km,Floating condition,No melt,RO,DA+,HO,No
 19,DOE,MALI,expAE05,UKESM,DOE\_MALI\_8km\_AntMean,DOE_MALI_8km_AntMean,False,Quad. Non-local,AntMean median,8km,2km,Floating condition,No melt,RO,DA+,HO,No
-20,IGE,Elmer/Ice,ctrlAE,ctrl,IGE\_ElmerIce,IGE_ElmerIce,True,PICO,custom,1km,0.5km,No,No melt,Fix,DA,SSA,No
-21,IGE,Elmer/Ice,expAE02,CCSM4,IGE\_ElmerIce,IGE_ElmerIce,True,PICO,custom,1km,0.5km,No,No melt,Fix,DA,SSA,No
-22,IGE,Elmer/Ice,expAE03,HadGEM2,IGE\_ElmerIce,IGE_ElmerIce,True,PICO,custom,1km,0.5km,No,No melt,Fix,DA,SSA,No
-23,IGE,Elmer/Ice,expAE04,CESM2,IGE\_ElmerIce,IGE_ElmerIce,True,PICO,custom,1km,0.5km,No,No melt,Fix,DA,SSA,No
-24,IGE,Elmer/Ice,expAE05,UKESM,IGE\_ElmerIce,IGE_ElmerIce,True,PICO,custom,1km,0.5km,No,No melt,Fix,DA,SSA,No
+20,IGE,Elmer/Ice,ctrlAE,ctrl,IGE\_ElmerIce,IGE_ElmerIce,True,PICO,custom,4km,2km,No,No melt,Fix,DA,SSA,No
+21,IGE,Elmer/Ice,expAE02,CCSM4,IGE\_ElmerIce,IGE_ElmerIce,True,PICO,custom,4km,2km,No,No melt,Fix,DA,SSA,No
+22,IGE,Elmer/Ice,expAE03,HadGEM2,IGE\_ElmerIce,IGE_ElmerIce,True,PICO,custom,4km,2km,No,No melt,Fix,DA,SSA,No
+23,IGE,Elmer/Ice,expAE04,CESM2,IGE\_ElmerIce,IGE_ElmerIce,True,PICO,custom,4km,2km,No,No melt,Fix,DA,SSA,No
+24,IGE,Elmer/Ice,expAE05,UKESM,IGE\_ElmerIce,IGE_ElmerIce,True,PICO,custom,4km,2km,No,No melt,Fix,DA,SSA,No
 25,ILTS,SICOPOLIS,ctrlAE,ctrl,ILTS\_SICOPOLIS,ILTS_SICOPOLIS,True,Quad. Non-local,AntMean median,8km,8km,Floating condition,No melt,MH,SP+,Hybrid,ELRA
 26,ILTS,SICOPOLIS,expAE02,CCSM4,ILTS\_SICOPOLIS,ILTS_SICOPOLIS,True,Quad. Non-local,AntMean median,8km,8km,Floating condition,No melt,MH,SP+,Hybrid,ELRA
 27,ILTS,SICOPOLIS,expAE03,HadGEM2,ILTS\_SICOPOLIS,ILTS_SICOPOLIS,True,Quad. Non-local,AntMean median,8km,8km,Floating condition,No melt,MH,SP+,Hybrid,ELRA
