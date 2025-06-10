@@ -352,7 +352,7 @@ legend('climate','melt sensitivity','calving group','climate-melt sensitivity','
 
 xlabel('Year','fontsize',13)
 %ylabel('\sigma (m SLE)','fontsize',13)
-ylabel('\sigma (Gt/a)','fontsize',13)
+ylabel('\sigma (Gt yr^{-1})','fontsize',13)
 text(2005,0,'a','VerticalAlignment','middle','HorizontalAlignment','right','fontsize',16,'fontweight','b');
 set(gca,'fontsize',13)
 
@@ -393,8 +393,8 @@ title(titlestring)
 
 
 %%
-print(gcf, '-dpdf', '-painters', 'figures_2025_02/ANOVA3_BMR_'+sector+'_ClimateMeltsensCalving.pdf');
-print(gcf, '-dpng','-r300', '-painters', 'figures_2025_02/ANOVA3_BMR_'+sector+'_ClimateMeltsensCalving.png');
+print(gcf, '-dpdf', '-painters', 'figures_2025_06/ANOVA3_BMR_'+sector+'_ClimateMeltsensCalving.pdf');
+print(gcf, '-dpng','-r300', '-painters', 'figures_2025_06/ANOVA3_BMR_'+sector+'_ClimateMeltsensCalving.png');
 
 
 %%%%%%%%%%%%%%%
